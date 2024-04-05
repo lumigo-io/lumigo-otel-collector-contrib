@@ -1,0 +1,13 @@
+module-sets:
+  contrib-base:
+    version: v0.97.0
+    modules:
+      - github.com/lumigo-io/lumigo-otel-collector-contrib
+      - github.com/lumigo-io/lumigo-otel-collector-contrib/extension/lumigoauthextension
+      - github.com/lumigo-io/lumigo-otel-collector-contrib/internal/k8sconfig
+      - github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor
+      - github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor
+
+excluded-modules:
+  - github.com/lumigo-io/lumigo-otel-collector-contrib/cmd/otelcontribcol
+  - github.com/lumigo-io/lumigo-otel-collector-contrib/internal/tools

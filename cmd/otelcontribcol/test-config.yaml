@@ -1,0 +1,67 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        auth:
+          authenticator: lumigoauth/server
+
+extensions:
+  health_check:
+  lumigoauth/server:
+    type: server
+  lumigoauth/ns_default:
+    type: client
+    token: t_123456789012345678901
+
+exporters:
+  otlphttp/lumigo_ns_default:
+    endpoint: https://ga-otlp.lumigo-tracer-edge.golumigo.com
+    auth:
+      authenticator: lumigoauth/ns_default
+  logging:
+    loglevel: debug
+    sampling_initial: 1
+    sampling_thereafter: 1
+
+processors:
+  redactionbykey:
+    allow_all_keys: true
+    blocked_values:
+      - "[^=]+[a-zA-Z]*pass[a-zA-Z]*=[^=]"
+    blocked_values_by_key:
+      - key: http.host
+        regex: "localhost"
+  resource/lumigo_token_from_auth:
+    # Store the Lumigo token provided via the Authorization
+    # header as the `lumigoToken` resource attribute.
+    attributes:
+    - key: lumigoToken
+      action: upsert
+      from_context: auth.lumigo-token
+  # transform/normalize_spans:
+  #   traces:
+  #     queries:
+  #     - set(attributes["lumigo-otlp-pipeline"], "true")  # This attribute marks spans that go through the OpenTelemetry collector in our pipeline; we use it to differentiate with the spans from the /api/spans pipeline
+  #     - truncate_all(attributes, 2048)  # Enforce a max length for string attributes of 2048 characters
+#  batch:
+#    # Process data in batches so that the file exporter
+#    # and logrotate have a chance to work with the file
+#    # being truncated in place
+#    send_batch_size: 1000
+#    timeout: 30
+
+service:
+  extensions:
+  - health_check
+  - lumigoauth/server
+  - lumigoauth/ns_default
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors:
+      - resource/lumigo_token_from_auth
+      #- transform/normalize_spans
+      - redactionbykey
+      exporters:
+      - logging
+      - otlphttp/lumigo_ns_default
