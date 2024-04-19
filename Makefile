@@ -229,9 +229,9 @@ otelcontribcol:
 
 .PHONY: update-otel
 update-otel:$(MULTIMOD)
-	$(MULTIMOD) sync -s=true -o ../opentelemetry-collector-contrib -m stable --commit-hash $(OTEL_STABLE_VERSION)
+	$(MULTIMOD) sync -s=true -o ../lumigo-otel-collector-contrib -m stable --commit-hash $(OTEL_STABLE_VERSION)
 	git add . && git commit -s -m "[chore] multimod update stable modules"
-	$(MULTIMOD) sync -s=true -o ../opentelemetry-collector-contrib -m beta --commit-hash $(OTEL_VERSION)
+	$(MULTIMOD) sync -s=true -o ../lumigo-otel-collector-contrib -m beta --commit-hash $(OTEL_VERSION)
 	git add . && git commit -s -m "[chore] multimod update beta modules"
 	$(MAKE) gotidy
 
