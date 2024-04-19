@@ -86,4 +86,4 @@ require (
 replace github.com/lumigo-io/lumigo-otel-collector-contrib/internal/k8sconfig v0.97.0 => ./../../internal/k8sconfig
 
 // openshift removed all tags from their repo, use the pseudoversion from the release-3.9 branch HEAD
-replace github.com/openshift/api v3.9.0+incompatible => github.com/openshift/api v0.0.0-20180801171038-322a19404e37
+replace github.com/openshift/api v3.9.0+incompatible => github.com/openshift/api v0.0.0-20210521075222-e273a339932a

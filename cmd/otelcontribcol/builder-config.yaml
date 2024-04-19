@@ -4,7 +4,7 @@ dist:
   description: Lumigo OpenTelemetry collector
   otelcol_version: "0.97.0"
   version: "0.97.0-dev"
-  output_path: dist
+  output_path: cmd/otelcontribcol
 
 exporters:
   - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/awskinesisexporter v0.97.0"

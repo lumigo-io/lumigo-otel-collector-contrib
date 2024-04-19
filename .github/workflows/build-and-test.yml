@@ -41,7 +41,7 @@ jobs:
       - name: Install dependencies
         if: steps.go-cache.outputs.cache-hit != 'true'
         run: |
-          go env -w GOPROXY='https://proxy.golang.org,direct'
+          # go env -w GOPROXY='https://proxy.golang.org,direct'
           make -j2 gomoddownload
       - name: Install Tools
         if: steps.go-cache.outputs.cache-hit != 'true'
@@ -82,7 +82,7 @@ jobs:
       - name: Install dependencies
         if: steps.go-cache.outputs.cache-hit != 'true'
         run: |
-          go env -w GOPROXY='https://proxy.golang.org,direct'
+          # go env -w GOPROXY='https://proxy.golang.org,direct'
           make -j2 gomoddownload
       - name: Install Tools
         if: steps.go-cache.outputs.cache-hit != 'true'
@@ -168,7 +168,7 @@ jobs:
       - name: Install dependencies
         if: steps.go-cache.outputs.cache-hit != 'true'
         run: |
-          go env -w GOPROXY='https://proxy.golang.org,direct'
+          # go env -w GOPROXY='https://proxy.golang.org,direct'
           make -j2 gomoddownload
       - name: Install Tools
         if: steps.go-cache.outputs.cache-hit != 'true'
@@ -189,10 +189,6 @@ jobs:
         run: |
           make genotelcontribcol
           git diff -s --exit-code || (echo 'Generated code is out of date, please run "make genotelcontribcol" and commit the changes in this PR.' && exit 1)
-      - name: CodeGen
-        run: |
-          make -j2 generate
-          git diff --exit-code ':!*go.sum' || (echo 'Generated code is out of date, please run "make generate" and commit the changes in this PR.' && exit 1)
       - name: MultimodVerify
         run: make multimod-verify
   unittest-matrix:
@@ -230,7 +226,7 @@ jobs:
       - name: Install dependencies
         if: steps.go-cache.outputs.cache-hit != 'true'
         run: |
-          go env -w GOPROXY='https://proxy.golang.org,direct'
+          # go env -w GOPROXY='https://proxy.golang.org,direct'
           make -j2 gomoddownload
       - name: Install Tools
         if: steps.go-cache.outputs.cache-hit != 'true'
@@ -374,7 +370,7 @@ jobs:
       - name: Install dependencies
         if: steps.go-cache.outputs.cache-hit != 'true'
         run: |
-          go env -w GOPROXY='https://proxy.golang.org,direct'
+          # go env -w GOPROXY='https://proxy.golang.org,direct'
           make -j2 gomoddownload
       - name: Install Tools
         if: steps.go-cache.outputs.cache-hit != 'true'

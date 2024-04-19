@@ -177,7 +177,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc // indirect
-	golang.org/x/net v0.22.0 // indirect
+	golang.org/x/net v0.23.0 // indirect
 	golang.org/x/oauth2 v0.18.0 // indirect
 	golang.org/x/term v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
@@ -210,3 +210,6 @@ replace github.com/lumigo-io/lumigo-otel-collector-contrib/extension/lumigoauthe
 replace github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor => ../../processor/k8seventsenricherprocessor
 
 replace github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor => ../../processor/redactionbykeyprocessor
+
+// openshift removed all tags from their repo, use the pseudoversion from the release-3.9 branch HEAD
+replace github.com/openshift/api v3.9.0+incompatible => github.com/openshift/api v0.0.0-20210521075222-e273a339932a

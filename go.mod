@@ -132,3 +132,6 @@ replace github.com/lumigo-io/lumigo-otel-collector-contrib/extension/lumigoauthe
 replace github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor => ./processor/k8seventsenricherprocessor
 
 replace github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor => ./processor/redactionbykeyprocessor
+
+// openshift removed all tags from their repo, use the pseudoversion from the release-3.9 branch HEAD
+replace github.com/openshift/api v3.9.0+incompatible => github.com/openshift/api v0.0.0-20210521075222-e273a339932a
