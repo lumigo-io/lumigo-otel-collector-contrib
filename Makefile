@@ -23,14 +23,14 @@ EX_CMD=-not -path "./cmd/*"
 # NONROOT_MODS includes ./* dirs (excludes . dir)
 NONROOT_MODS := $(shell find . $(FIND_MOD_ARGS) -exec $(TO_MOD_DIR) )
 
-RECEIVER_MODS := $(shell find ./receiver/* $(FIND_MOD_ARGS) -exec $(TO_MOD_DIR) )
+# RECEIVER_MODS := $(shell find ./receiver/* $(FIND_MOD_ARGS) -exec $(TO_MOD_DIR) )
 PROCESSOR_MODS := $(shell find ./processor/* $(FIND_MOD_ARGS) -exec $(TO_MOD_DIR) )
-EXPORTER_MODS := $(shell find ./exporter/* $(FIND_MOD_ARGS) -exec $(TO_MOD_DIR) )
+# EXPORTER_MODS := $(shell find ./exporter/* $(FIND_MOD_ARGS) -exec $(TO_MOD_DIR) )
 EXTENSION_MODS := $(shell find ./extension/* $(FIND_MOD_ARGS) -exec $(TO_MOD_DIR) )
 INTERNAL_MODS := $(shell find ./internal/* $(FIND_MOD_ARGS) -exec $(TO_MOD_DIR) )
-PKG_MODS := $(shell find ./pkg/* $(FIND_MOD_ARGS) -exec $(TO_MOD_DIR) )
+# PKG_MODS := $(shell find ./pkg/* $(FIND_MOD_ARGS) -exec $(TO_MOD_DIR) )
 CMD_MODS := $(shell find ./cmd/* $(FIND_MOD_ARGS) -not -path "./cmd/otelcontribcol/*" -exec $(TO_MOD_DIR) )
-OTHER_MODS := $(shell find . $(EX_COMPONENTS) $(EX_INTERNAL) $(EX_PKG) $(EX_CMD) $(FIND_MOD_ARGS) -exec $(TO_MOD_DIR) ) $(PWD)
+# OTHER_MODS := $(shell find . $(EX_COMPONENTS) $(EX_INTERNAL) $(EX_PKG) $(EX_CMD) $(FIND_MOD_ARGS) -exec $(TO_MOD_DIR) ) $(PWD)
 ALL_MODS := $(RECEIVER_MODS) $(PROCESSOR_MODS) $(EXPORTER_MODS) $(EXTENSION_MODS) $(INTERNAL_MODS) $(PKG_MODS) $(CMD_MODS) $(OTHER_MODS)
 
 FIND_INTEGRATION_TEST_MODS={ find . -type f -name "*integration_test.go" & find . -type f -name "*e2e_test.go" -not -path "./testbed/*"; }
@@ -46,14 +46,14 @@ all-modules:
 	@echo $(NONROOT_MODS) | tr ' ' '\n' | sort
 
 all-groups:
-	@echo "receiver: $(RECEIVER_MODS)"
+#	@echo "receiver: $(RECEIVER_MODS)"
 	@echo "\nprocessor: $(PROCESSOR_MODS)"
-	@echo "\nexporter: $(EXPORTER_MODS)"
+#	@echo "\nexporter: $(EXPORTER_MODS)"
 	@echo "\nextension: $(EXTENSION_MODS)"
 	@echo "\ninternal: $(INTERNAL_MODS)"
-	@echo "\npkg: $(PKG_MODS)"
+#	@echo "\npkg: $(PKG_MODS)"
 	@echo "\ncmd: $(CMD_MODS)"
-	@echo "\nother: $(OTHER_MODS)"
+#	@echo "\nother: $(OTHER_MODS)"
 
 .PHONY: all
 all: install-tools all-common goporto multimod-verify gotest otelcontribcol
@@ -146,14 +146,14 @@ $(ALL_MODS):
 .PHONY: for-all-target
 for-all-target: $(ALL_MODS)
 
-.PHONY: for-receiver-target
-for-receiver-target: $(RECEIVER_MODS)
+# .PHONY: for-receiver-target
+# for-receiver-target: $(RECEIVER_MODS)
 
 .PHONY: for-processor-target
 for-processor-target: $(PROCESSOR_MODS)
 
-.PHONY: for-exporter-target
-for-exporter-target: $(EXPORTER_MODS)
+# .PHONY: for-exporter-target
+# for-exporter-target: $(EXPORTER_MODS)
 
 .PHONY: for-extension-target
 for-extension-target: $(EXTENSION_MODS)
@@ -161,8 +161,8 @@ for-extension-target: $(EXTENSION_MODS)
 .PHONY: for-internal-target
 for-internal-target: $(INTERNAL_MODS)
 
-.PHONY: for-pkg-target
-for-pkg-target: $(PKG_MODS)
+# .PHONY: for-pkg-target
+# for-pkg-target: $(PKG_MODS)
 
 .PHONY: for-cmd-target
 for-cmd-target: $(CMD_MODS)

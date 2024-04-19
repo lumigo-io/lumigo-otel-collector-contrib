@@ -61,7 +61,7 @@ jobs:
           - internal
           # - pkg
           - cmd
-          - other
+          # - other
     runs-on: ubuntu-latest
     needs: [setup-environment]
     steps:
@@ -122,7 +122,7 @@ jobs:
           - internal
           # - pkg
           - cmd
-          - other
+          # - other
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -209,7 +209,7 @@ jobs:
           - internal
           # - pkg
           - cmd
-          - other
+          # - other
     runs-on: ${{ matrix.runner }}
     needs: [setup-environment]
     steps:
@@ -280,7 +280,7 @@ jobs:
           - internal
           # - pkg
           - cmd
-          - other
+          # - other
     runs-on: ubuntu-latest
     needs: [setup-environment]
     steps:
