@@ -11,6 +11,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Configure Git
+        run: |
+          git config --global user.name "Lumigo Bot"
+          git config --global user.email "bot@lumigo.io"
+
       - name: Read versions.yaml
         id: read-version
         run: |
