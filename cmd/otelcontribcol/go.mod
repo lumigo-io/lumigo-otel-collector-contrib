@@ -2,7 +2,9 @@
 
 module github.com/lumigo-io/lumigo-otel-collector-contrib
 
-go 1.21
+go 1.21.0
+
+toolchain go1.21.9
 
 require (
 	github.com/lumigo-io/lumigo-otel-collector-contrib/extension/lumigoauthextension v0.97.0
