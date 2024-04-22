@@ -125,17 +125,6 @@ for-all:
 	 	$${CMD} ); \
 	done
 
-COMMIT?=HEAD
-MODSET?=contrib-core
-REMOTE?=git@github.com:lumigo-io/lumigo-otel-collector-contrib.git
-.PHONY: push-tags
-push-tags: $(MULTIMOD)
-	$(MULTIMOD) verify
-	set -e; for tag in `$(MULTIMOD) tag -m ${MODSET} -c ${COMMIT} --print-tags | grep -v "Using" `; do \
-		echo "pushing tag $${tag}"; \
-		git push ${REMOTE} $${tag}; \
-	done;
-
 # Define a delegation target for each module
 .PHONY: $(ALL_MODS)
 $(ALL_MODS):
@@ -254,12 +243,12 @@ multimod-verify: $(MULTIMOD)
 
 .PHONY: multimod-prerelease
 multimod-prerelease: $(MULTIMOD)
-	$(MULTIMOD) prerelease -s=true -b=false -v ./versions.yaml -m contrib-base
+	$(MULTIMOD) prerelease -s=true -b=false -v ./versions.yaml -m lumigo-custom
 	$(MAKE) gotidy
 
 .PHONY: multimod-sync
 multimod-sync: $(MULTIMOD)
-	$(MULTIMOD) sync -a=true -s=true -o ../opentelemetry-collector-contrib
+	$(MULTIMOD) sync -a=true -s=true -o ../lumigo-otel-collector-contrib
 	$(MAKE) gotidy
 
 .PHONY: crosslink
