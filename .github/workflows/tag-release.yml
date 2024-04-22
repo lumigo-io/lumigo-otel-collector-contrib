@@ -1,4 +1,4 @@
-name: Tag Release
+name: tag-release
 
 on:
   workflow_dispatch:
@@ -37,5 +37,5 @@ jobs:
         run: |
           NEXT_VERSION=${{ steps.find-tag.outputs.next-version }}
           echo "Creating tag $NEXT_VERSION"
-          git tag "$NEXT_VERSION"
+          git tag -a "$NEXT_VERSION" -m "Release $NEXT_VERSION"
           git push origin "$NEXT_VERSION"
