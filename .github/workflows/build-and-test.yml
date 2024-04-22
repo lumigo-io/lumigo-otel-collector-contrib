@@ -1,5 +1,6 @@
 name: build-and-test
 on:
+  create:
   push:
     branches: [ main ]
     tags:
