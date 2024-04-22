@@ -1,5 +1,5 @@
 module-sets:
-  contrib-base:
+  lumigo-custom:
     version: v0.97.0
     modules:
       - github.com/lumigo-io/lumigo-otel-collector-contrib
