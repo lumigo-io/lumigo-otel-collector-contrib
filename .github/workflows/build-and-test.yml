@@ -6,6 +6,8 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+*'
   merge_group:
   pull_request:
+    paths-ignore:
+      - '**.md'
 env:
   TEST_RESULTS: testbed/tests/results/junit/results.xml
   GOPROXY: https://goproxy.cncf.actuated.dev,direct
@@ -427,7 +429,7 @@ jobs:
         run: ./.github/workflows/scripts/set_release_tag.sh
       - name: Create Github Release
         run: |
-          gh release create $RELEASE_TAG -t $RELEASE_TAG --verify-tag -n "The Lumigo OpenTelemetry Collector Contrib contains everything in the [opentelemetry-collector-contrib release](https://github.com/lumigo-io/lumigo-otel-collector-contrib/releases/tag/$RELEASE_TAG), be sure to check the release notes there as well."
+          gh release create $RELEASE_TAG -t $RELEASE_TAG --verify-tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_TAG: ${{ steps.github_tag.outputs.tag }}
