@@ -57,14 +57,16 @@ jobs:
           # Run go mod tidy
           make -j4 gotidy
 
-          git add .
-
-          # Run checks and regenerate otelcontribcol
-          make checks
+          # Regnerate otelcontribcol
+          make otelcontribcol
 
           # Commit the changes
           git add .
           git commit -m "Update to OpenTelemetry Collector $tag_name"
+
+          # Run checks
+          make checks
+
           git push origin update-otel-$tag_name
 
       - name: Create Pull Request
