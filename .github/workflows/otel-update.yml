@@ -54,7 +54,12 @@ jobs:
           # Update version in versions.yaml
           sed -i "s/$current_version/$latest_version/g" versions.yaml
 
-          # Run checks to run `go mod tidy` and regenerate otelcontribcol
+          # Run go mod tidy
+          make -j4 gotidy
+
+          git add .
+
+          # Run checks and regenerate otelcontribcol
           make checks
 
           # Commit the changes
