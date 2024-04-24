@@ -216,14 +216,6 @@ otelcontribcol:
 	cd ./cmd/otelcontribcol && GO111MODULE=on CGO_ENABLED=0 $(GOCMD) build -trimpath -o ../../bin/otelcontribcol_$(GOOS)_$(GOARCH)$(EXTENSION) \
 		-tags $(GO_BUILD_TAGS) .
 
-.PHONY: update-otel
-update-otel:$(MULTIMOD)
-	$(MULTIMOD) sync -s=true -o ../lumigo-otel-collector-contrib -m stable --commit-hash $(OTEL_STABLE_VERSION)
-	git add . && git commit -s -m "[chore] multimod update stable modules"
-	$(MULTIMOD) sync -s=true -o ../lumigo-otel-collector-contrib -m beta --commit-hash $(OTEL_VERSION)
-	git add . && git commit -s -m "[chore] multimod update beta modules"
-	$(MAKE) gotidy
-
 .PHONY: all-checklinks
 all-checklinks:
 	$(MAKE) $(FOR_GROUP_TARGET) TARGET="checklinks"
