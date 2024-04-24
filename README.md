@@ -41,6 +41,25 @@ Add the new component to the following files:
 
 Run `make` to ensure the code builds correctly.
 
+## OTeL Collector Contrib Releases
+
+Every week the `check-for-otel-update` workflow will execute looking for a more recent release
+of [OTeL Collector Contrib](https://github.com/open-telemetry/opentelemetry-collector-contrib).
+It uses the version in `OTEL_VERSION`, which is set to the current version used,
+to determine if there is a more recent release.
+
+If a new release is found, it updates the following files:
+
+- [builder-config.yaml](cmd/otelcontribcol/builder-config.yaml)
+- [versions.yaml](versions.yaml)
+- */go.mod files
+
+The workflow runs `make checks` to regenerate the collector build and `tidy` the go modules.
+
+A branch is created with the changes, and a PR is opened.
+
+**Note:** The `check-for-otel-update` workflow does **not** pull the changes from the coped `/internal/k8sconfig` module. Changes in this module will need to be manually included.
+
 ## How to Release?
 
 ### What version to use?

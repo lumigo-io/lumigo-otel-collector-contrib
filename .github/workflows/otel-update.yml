@@ -41,6 +41,7 @@ jobs:
         run: |
           tag_name=${{ steps.get-latest-otel-version.outputs.latest_otel_version }}
           latest_version=$(echo $tag_name | cut -c 2-)
+          current_version=${{ steps.get-current-otel-version.outputs.current_version }}
           git checkout -b update-otel-$tag_name
           echo $latest_version > OTEL_VERSION
 
@@ -49,6 +50,9 @@ jobs:
 
           # Update version in builder-config.yaml
           sed -i "s/$current_version/$latest_version/g" cmd/otelcontribcol/builder-config.yaml
+
+          # Update version in versions.yaml
+          sed -i "s/$current_version/$latest_version/g" versions.yaml
 
           # Run checks to run `go mod tidy` and regenerate otelcontribcol
           make checks
