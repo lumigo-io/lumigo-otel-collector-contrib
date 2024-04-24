@@ -1,0 +1,69 @@
+name: check-for-otel-update
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Runs every week at midnight
+  workflow_dispatch:
+
+jobs:
+  check-and-update-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get currently used OTeL Collector version
+        id: get-current-otel-version
+        run: |
+          current_version=$(cat OTEL_VERSION)
+          echo "current_version=$current_version" >> $GITHUB_OUTPUT
+
+      - name: Get latest OTeL Collector Contrib release
+        id: get-latest-otel-version
+        run: |
+          latest_otel_version=$(curl -s https://api.github.com/repos/open-telemetry/opentelemetry-collector-contrib/releases/latest | grep '"tag_name":' | cut -d'"' -f4)
+          echo "latest_otel_version=$latest_otel_version" >> $GITHUB_OUTPUT
+
+      - name: Is a newer version available?
+        id: compare-versions
+        run: |
+          latest_version=$(echo ${{ steps.get-latest-otel-version.outputs.latest_otel_version }} | cut -c 2-)
+          current_version=${{ steps.get-current-otel-version.outputs.current_version }}
+          if [ "$current_version" != "$latest_version" ]; then
+            echo "update_needed=true" >> $GITHUB_OUTPUT
+          else
+            echo "update_needed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update version and dependencies
+        if: steps.compare-versions.outputs.update_needed == 'true'
+        run: |
+          tag_name=${{ steps.get-latest-otel-version.outputs.latest_otel_version }}
+          latest_version=$(echo $tag_name | cut -c 2-)
+          git checkout -b update-otel-$tag_name
+          echo $latest_version > OTEL_VERSION
+
+          # Update version in go.mod files
+          find . -name "go.mod" -exec sed -i "s/$current_version/$latest_version/g" {} +
+
+          # Update version in builder-config.yaml
+          sed -i "s/$current_version/$latest_version/g" cmd/otelcontribcol/builder-config.yaml
+
+          # Run checks to run `go mod tidy` and regenerate otelcontribcol
+          make checks
+
+          # Commit the changes
+          git add .
+          git commit -m "Update to OpenTelemetry Collector $tag_name"
+          git push origin update-otel-$tag_name
+
+      - name: Create Pull Request
+        if: steps.compare-versions.outputs.update_needed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: update-otel-${{ steps.get-latest-otel-version.outputs.latest_otel_version }}
+          title: Update to OpenTelemetry Collector ${{ steps.get-latest-otel-version.outputs.latest_otel_version }}
+          commit-message: Update to OpenTelemetry Collector ${{ steps.get-latest-otel-version.outputs.latest_otel_version }}
+          body: |
+            This PR updates the repo to the latest release of OpenTelemetry Collector Contrib.
