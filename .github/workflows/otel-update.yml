@@ -83,6 +83,7 @@ jobs:
         if: steps.compare-versions.outputs.update_needed == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
+          base: main
           branch: update-otel-${{ steps.get-latest-otel-version.outputs.latest_otel_version }}
           title: Update to OpenTelemetry Collector ${{ steps.get-latest-otel-version.outputs.latest_otel_version }}
           commit-message: Update to OpenTelemetry Collector ${{ steps.get-latest-otel-version.outputs.latest_otel_version }}
