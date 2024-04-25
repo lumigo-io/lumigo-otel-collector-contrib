@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ssh-key: "${{secrets.CREATE_PR_KEY}}"
 
       - name: Get currently used OTeL Collector version
         id: get-current-otel-version
@@ -72,3 +70,16 @@ jobs:
           commit-message: Update to OpenTelemetry Collector ${{ steps.get-latest-otel-version.outputs.latest_otel_version }}
           body: |
             This PR updates to ${{ steps.get-latest-otel-version.outputs.latest_otel_version }} of OpenTelemetry Collector Contrib.
+
+      - name: Trigger build-and-test workflow with PR
+        if: steps.compare-versions.outputs.update_needed == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'build-and-test.yml',
+              ref: 'update-otel-${{ steps.get-latest-otel-version.outputs.latest_otel_version }}',
+            });
