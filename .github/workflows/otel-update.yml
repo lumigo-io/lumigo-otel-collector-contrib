@@ -36,6 +36,11 @@ jobs:
             echo "update_needed=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Set Git config up
+        run: |
+          git config --global user.name "Lumigo Bot"
+          git config --global user.email "bot@lumigo.io"
+
       - name: Update version and dependencies
         if: steps.compare-versions.outputs.update_needed == 'true'
         run: |
