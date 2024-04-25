@@ -54,11 +54,12 @@ If a new release is found, it updates the following files:
 - [versions.yaml](versions.yaml)
 - */go.mod files
 
-The workflow runs `make checks` to regenerate the collector build and `tidy` the go modules.
+The workflow regenerates the collector build and tidies the go modules.
 
 A branch is created with the changes, and a PR is opened.
+Be sure to check the status of the `build-and-test` workflow to ensure the build is successful before merging the PR.
 
-**Note:** The `check-for-otel-update` workflow does **not** pull the changes from the coped `/internal/k8sconfig` module. Changes in this module will need to be manually included.
+**Note:** The `check-for-otel-update` workflow does **not** pull the changes from the duplicate `/internal/k8sconfig` module of a new release. Changes in this module will need to be manually included.
 
 ## How to Release?
 

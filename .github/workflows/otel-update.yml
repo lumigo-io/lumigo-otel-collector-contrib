@@ -70,8 +70,10 @@ jobs:
           commit-message: Update to OpenTelemetry Collector ${{ steps.get-latest-otel-version.outputs.latest_otel_version }}
           body: |
             This PR updates to ${{ steps.get-latest-otel-version.outputs.latest_otel_version }} of OpenTelemetry Collector Contrib.
+            Be sure to verify the status of the build-and-test workflow for this branch before merging.
+            See [build-and-test workflow](https://github.com/lumigo-io/lumigo-otel-collector-contrib/actions/workflows/build-and-test.yml) for more details.
 
-      - name: Trigger build-and-test workflow with PR
+      - name: Trigger build-and-test workflow of branch for PR
         if: steps.compare-versions.outputs.update_needed == 'true'
         uses: actions/github-script@v7
         with:
