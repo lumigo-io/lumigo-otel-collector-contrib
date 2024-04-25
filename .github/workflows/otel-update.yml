@@ -36,18 +36,13 @@ jobs:
             echo "update_needed=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Set Git config up
-        run: |
-          git config --global user.name "Lumigo Bot"
-          git config --global user.email "bot@lumigo.io"
-
       - name: Update version and dependencies
         if: steps.compare-versions.outputs.update_needed == 'true'
         run: |
           tag_name=${{ steps.get-latest-otel-version.outputs.latest_otel_version }}
           latest_version=$(echo $tag_name | cut -c 2-)
           current_version=${{ steps.get-current-otel-version.outputs.current_version }}
-          git checkout -b update-otel-$tag_name
+
           echo $latest_version > OTEL_VERSION
 
           # Update version in go.mod files
@@ -63,21 +58,8 @@ jobs:
           go mod tidy
           make -j4 gotidy
 
-          # Commit the changes
-          git add .
-          git commit -m "Update to OpenTelemetry Collector $tag_name"
-
           # Regnerate otelcontribcol
           make genotelcontribcol
-
-          # Commit the changes
-          git add .
-          git commit -m "Rebuild otelcontribcol for OpenTelemetry Collector $tag_name"
-
-          # Run checks
-          make checks
-
-          git push origin update-otel-$tag_name
 
       - name: Create Pull Request
         if: steps.compare-versions.outputs.update_needed == 'true'
