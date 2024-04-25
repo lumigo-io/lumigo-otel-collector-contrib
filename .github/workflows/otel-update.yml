@@ -81,6 +81,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'build-and-test.yml',
-              ref: update-otel-${{ steps.get-latest-otel-version.outputs.latest_otel_version }},
+              ref: 'update-otel-${{ steps.get-latest-otel-version.outputs.latest_otel_version }}',
               inputs: {}
             });
