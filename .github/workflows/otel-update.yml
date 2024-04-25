@@ -59,16 +59,16 @@ jobs:
           # Update version in versions.yaml
           sed -i "s/$current_version/$latest_version/g" versions.yaml
 
-          # Run go mod tidy and download
+          # Run go mod tidy
+          go mod tidy
           make -j4 gotidy
-          make -j2 gomoddownload
 
           # Commit the changes
           git add .
           git commit -m "Update to OpenTelemetry Collector $tag_name"
 
           # Regnerate otelcontribcol
-          make otelcontribcol
+          make genotelcontribcol
 
           # Commit the changes
           git add .
