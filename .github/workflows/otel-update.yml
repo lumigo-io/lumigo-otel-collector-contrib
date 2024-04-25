@@ -65,9 +65,22 @@ jobs:
         if: steps.compare-versions.outputs.update_needed == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
-          base: main
           branch: update-otel-${{ steps.get-latest-otel-version.outputs.latest_otel_version }}
           title: Update to OpenTelemetry Collector ${{ steps.get-latest-otel-version.outputs.latest_otel_version }}
           commit-message: Update to OpenTelemetry Collector ${{ steps.get-latest-otel-version.outputs.latest_otel_version }}
           body: |
-            This PR updates the repo to the latest release of OpenTelemetry Collector Contrib.
+            This PR updates to ${{ steps.get-latest-otel-version.outputs.latest_otel_version }} of OpenTelemetry Collector Contrib.
+
+      - name: Trigger build-and-test workflow with PR
+        if: steps.compare-versions.outputs.update_needed == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'build-and-test.yml',
+              ref: update-otel-${{ steps.get-latest-otel-version.outputs.latest_otel_version }},
+              inputs: {}
+            });

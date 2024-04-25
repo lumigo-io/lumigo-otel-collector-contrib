@@ -8,6 +8,7 @@ on:
   pull_request:
     paths-ignore:
       - '**.md'
+  workflow_dispatch:
 env:
   TEST_RESULTS: testbed/tests/results/junit/results.xml
   GOPROXY: https://goproxy.cncf.actuated.dev,direct
