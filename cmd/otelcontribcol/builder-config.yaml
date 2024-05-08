@@ -37,4 +37,3 @@ replaces:
   - github.com/lumigo-io/lumigo-otel-collector-contrib/extension/lumigoauthextension => ../../extension/lumigoauthextension
   - github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor => ../../processor/k8seventsenricherprocessor
   - github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor => ../../processor/redactionbykeyprocessor
-  - github.com/openshift/api v3.9.0+incompatible => github.com/openshift/api v0.0.0-20210521075222-e273a339932a
