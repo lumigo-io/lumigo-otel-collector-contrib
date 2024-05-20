@@ -1,6 +1,6 @@
 module-sets:
   lumigo-custom:
-    version: v0.97.0
+    version: v0.100.0
     modules:
       - github.com/lumigo-io/lumigo-otel-collector-contrib
       - github.com/lumigo-io/lumigo-otel-collector-contrib/extension/lumigoauthextension
