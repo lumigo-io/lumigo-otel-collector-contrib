@@ -1,6 +1,6 @@
 module github.com/lumigo-io/lumigo-otel-collector-contrib/internal/tools
 
-go 1.21.0
+go 1.22.3
 
 require (
 	github.com/Khan/genqlient v0.7.0

@@ -1,6 +1,6 @@
 module github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor
 
-go 1.21.0
+go 1.22.3
 
 require (
 	github.com/google/uuid v1.6.0
