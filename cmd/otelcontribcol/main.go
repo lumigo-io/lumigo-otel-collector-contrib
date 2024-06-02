@@ -21,7 +21,7 @@ func main() {
 	info := component.BuildInfo{
 		Command:     "lumigo-collector",
 		Description: "Lumigo OpenTelemetry collector",
-		Version:     "0.100.0-dev",
+		Version:     "0.101.0-dev",
 	}
 
 	set := otelcol.CollectorSettings{
