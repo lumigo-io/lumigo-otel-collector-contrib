@@ -24,8 +24,8 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8sobjectsreceiver v0.102.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/syslogreceiver v0.102.0
 	github.com/stretchr/testify v1.9.0
-	go.opentelemetry.io/collector/component v0.102.0
-	go.opentelemetry.io/collector/confmap v0.102.0
+	go.opentelemetry.io/collector/component v0.102.1
+	go.opentelemetry.io/collector/confmap v0.102.1
 	go.opentelemetry.io/collector/confmap/converter/expandconverter v0.102.0
 	go.opentelemetry.io/collector/confmap/provider/envprovider v0.102.0
 	go.opentelemetry.io/collector/confmap/provider/fileprovider v0.102.0
@@ -36,7 +36,7 @@ require (
 	go.opentelemetry.io/collector/exporter v0.102.0
 	go.opentelemetry.io/collector/exporter/loggingexporter v0.102.0
 	go.opentelemetry.io/collector/exporter/otlphttpexporter v0.102.0
-	go.opentelemetry.io/collector/extension v0.102.0
+	go.opentelemetry.io/collector/extension v0.102.1
 	go.opentelemetry.io/collector/otelcol v0.102.0
 	go.opentelemetry.io/collector/processor v0.102.0
 	go.opentelemetry.io/collector/processor/batchprocessor v0.102.0
@@ -162,19 +162,19 @@ require (
 	github.com/xdg-go/stringprep v1.0.4 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	go.opencensus.io v0.24.0 // indirect
-	go.opentelemetry.io/collector v0.102.0 // indirect
-	go.opentelemetry.io/collector/config/configauth v0.102.0 // indirect
+	go.opentelemetry.io/collector v0.102.1 // indirect
+	go.opentelemetry.io/collector/config/configauth v0.102.1 // indirect
 	go.opentelemetry.io/collector/config/configcompression v1.9.0 // indirect
-	go.opentelemetry.io/collector/config/configgrpc v0.102.0 // indirect
+	go.opentelemetry.io/collector/config/configgrpc v0.102.1 // indirect
 	go.opentelemetry.io/collector/config/confighttp v0.102.0 // indirect
-	go.opentelemetry.io/collector/config/confignet v0.102.0 // indirect
+	go.opentelemetry.io/collector/config/confignet v0.102.1 // indirect
 	go.opentelemetry.io/collector/config/configopaque v1.9.0 // indirect
 	go.opentelemetry.io/collector/config/configretry v0.102.0 // indirect
-	go.opentelemetry.io/collector/config/configtelemetry v0.102.0 // indirect
-	go.opentelemetry.io/collector/config/configtls v0.102.0 // indirect
-	go.opentelemetry.io/collector/config/internal v0.102.0 // indirect
-	go.opentelemetry.io/collector/consumer v0.102.0 // indirect
-	go.opentelemetry.io/collector/extension/auth v0.102.0 // indirect
+	go.opentelemetry.io/collector/config/configtelemetry v0.102.1 // indirect
+	go.opentelemetry.io/collector/config/configtls v0.102.1 // indirect
+	go.opentelemetry.io/collector/config/internal v0.102.1 // indirect
+	go.opentelemetry.io/collector/consumer v0.102.1 // indirect
+	go.opentelemetry.io/collector/extension/auth v0.102.1 // indirect
 	go.opentelemetry.io/collector/featuregate v1.9.0 // indirect
 	go.opentelemetry.io/collector/pdata v1.9.0 // indirect
 	go.opentelemetry.io/collector/semconv v0.102.0 // indirect
