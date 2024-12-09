@@ -6,6 +6,7 @@ import (
 	lumigoauthextension "github.com/lumigo-io/lumigo-otel-collector-contrib/extension/lumigoauthextension"
 	k8seventsenricherprocessor "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor"
 	redactionbykeyprocessor "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor"
+	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/connector"
 	"go.opentelemetry.io/collector/exporter"
 	loggingexporter "go.opentelemetry.io/collector/exporter/loggingexporter"
@@ -44,6 +45,10 @@ func components() (otelcol.Factories, error) {
 	if err != nil {
 		return otelcol.Factories{}, err
 	}
+	factories.ExtensionModules = make(map[component.Type]string, len(factories.Extensions))
+	factories.ExtensionModules[lumigoauthextension.NewFactory().Type()] = "github.com/lumigo-io/lumigo-otel-collector-contrib/extension/lumigoauthextension v0.108.0"
+	factories.ExtensionModules[headerssetterextension.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/extension/headerssetterextension v0.108.0"
+	factories.ExtensionModules[healthcheckextension.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/extension/healthcheckextension v0.108.0"
 
 	factories.Receivers, err = receiver.MakeFactoryMap(
 		otlpreceiver.NewFactory(),
@@ -53,6 +58,10 @@ func components() (otelcol.Factories, error) {
 	if err != nil {
 		return otelcol.Factories{}, err
 	}
+	factories.ReceiverModules = make(map[component.Type]string, len(factories.Receivers))
+	factories.ReceiverModules[otlpreceiver.NewFactory().Type()] = "go.opentelemetry.io/collector/receiver/otlpreceiver v0.108.0"
+	factories.ReceiverModules[k8sobjectsreceiver.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8sobjectsreceiver v0.108.0"
+	factories.ReceiverModules[syslogreceiver.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/syslogreceiver v0.108.0"
 
 	factories.Exporters, err = exporter.MakeFactoryMap(
 		awskinesisexporter.NewFactory(),
@@ -65,6 +74,13 @@ func components() (otelcol.Factories, error) {
 	if err != nil {
 		return otelcol.Factories{}, err
 	}
+	factories.ExporterModules = make(map[component.Type]string, len(factories.Exporters))
+	factories.ExporterModules[awskinesisexporter.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/awskinesisexporter v0.108.0"
+	factories.ExporterModules[awss3exporter.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/awss3exporter v0.108.0"
+	factories.ExporterModules[kafkaexporter.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/kafkaexporter v0.108.0"
+	factories.ExporterModules[loggingexporter.NewFactory().Type()] = "go.opentelemetry.io/collector/exporter/loggingexporter v0.108.0"
+	factories.ExporterModules[otlphttpexporter.NewFactory().Type()] = "go.opentelemetry.io/collector/exporter/otlphttpexporter v0.108.0"
+	factories.ExporterModules[fileexporter.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/fileexporter v0.108.0"
 
 	factories.Processors, err = processor.MakeFactoryMap(
 		batchprocessor.NewFactory(),
@@ -79,11 +95,21 @@ func components() (otelcol.Factories, error) {
 	if err != nil {
 		return otelcol.Factories{}, err
 	}
+	factories.ProcessorModules = make(map[component.Type]string, len(factories.Processors))
+	factories.ProcessorModules[batchprocessor.NewFactory().Type()] = "go.opentelemetry.io/collector/processor/batchprocessor v0.108.0"
+	factories.ProcessorModules[k8seventsenricherprocessor.NewFactory().Type()] = "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor v0.108.0"
+	factories.ProcessorModules[redactionbykeyprocessor.NewFactory().Type()] = "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor v0.108.0"
+	factories.ProcessorModules[attributesprocessor.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/processor/attributesprocessor v0.108.0"
+	factories.ProcessorModules[filterprocessor.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/processor/filterprocessor v0.108.0"
+	factories.ProcessorModules[k8sattributesprocessor.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sattributesprocessor v0.108.0"
+	factories.ProcessorModules[resourceprocessor.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/processor/resourceprocessor v0.108.0"
+	factories.ProcessorModules[transformprocessor.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/processor/transformprocessor v0.108.0"
 
 	factories.Connectors, err = connector.MakeFactoryMap()
 	if err != nil {
 		return otelcol.Factories{}, err
 	}
+	factories.ConnectorModules = make(map[component.Type]string, len(factories.Connectors))
 
 	return factories, nil
 }
