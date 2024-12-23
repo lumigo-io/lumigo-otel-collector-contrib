@@ -43,7 +43,7 @@ func createDefaultConfig() component.Config {
 	}
 }
 
-func createExtension(_ context.Context, set extension.CreateSettings, cfg component.Config) (extension.Extension, error) {
+func createExtension(_ context.Context, set extension.Settings, cfg component.Config) (extension.Extension, error) {
 	// check if config is a server auth(Htpasswd should be set)
 	switch cfg.(*Config).Type {
 	case Default:
