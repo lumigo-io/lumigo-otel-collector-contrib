@@ -6,8 +6,6 @@ package main
 import (
 	"log"
 
-	k8seventsenricherprocessor "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor"
-	redactionbykeyprocessor "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor"
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/confmap"
 	envprovider "go.opentelemetry.io/collector/confmap/provider/envprovider"
@@ -16,13 +14,6 @@ import (
 	httpsprovider "go.opentelemetry.io/collector/confmap/provider/httpsprovider"
 	yamlprovider "go.opentelemetry.io/collector/confmap/provider/yamlprovider"
 	"go.opentelemetry.io/collector/otelcol"
-	batchprocessor "go.opentelemetry.io/collector/processor/batchprocessor"
-
-	attributesprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/attributesprocessor"
-	filterprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/filterprocessor"
-	k8sattributesprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sattributesprocessor"
-	resourceprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/resourceprocessor"
-	transformprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/transformprocessor"
 )
 
 func main() {
@@ -43,14 +34,6 @@ func main() {
 					httpprovider.NewFactory(),
 					httpsprovider.NewFactory(),
 					yamlprovider.NewFactory(),
-					batchprocessor.NewFactory(),
-					k8seventsenricherprocessor.NewFactory(),
-					redactionbykeyprocessor.NewFactory(),
-					attributesprocessor.NewFactory(),
-					filterprocessor.NewFactory(),
-					k8sattributesprocessor.NewFactory(),
-					resourceprocessor.NewFactory(),
-					transformprocessor.NewFactory(),
 				},
 			},
 		},

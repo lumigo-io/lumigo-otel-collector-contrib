@@ -4,6 +4,8 @@ package main
 
 import (
 	lumigoauthextension "github.com/lumigo-io/lumigo-otel-collector-contrib/extension/lumigoauthextension"
+	k8seventsenricherprocessor "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor"
+	redactionbykeyprocessor "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor"
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/connector"
 	"go.opentelemetry.io/collector/exporter"
@@ -12,6 +14,7 @@ import (
 	"go.opentelemetry.io/collector/extension"
 	"go.opentelemetry.io/collector/otelcol"
 	"go.opentelemetry.io/collector/processor"
+	batchprocessor "go.opentelemetry.io/collector/processor/batchprocessor"
 	"go.opentelemetry.io/collector/receiver"
 	otlpreceiver "go.opentelemetry.io/collector/receiver/otlpreceiver"
 
@@ -21,6 +24,11 @@ import (
 	kafkaexporter "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/kafkaexporter"
 	headerssetterextension "github.com/open-telemetry/opentelemetry-collector-contrib/extension/headerssetterextension"
 	healthcheckextension "github.com/open-telemetry/opentelemetry-collector-contrib/extension/healthcheckextension"
+	attributesprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/attributesprocessor"
+	filterprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/filterprocessor"
+	k8sattributesprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sattributesprocessor"
+	resourceprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/resourceprocessor"
+	transformprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/transformprocessor"
 	k8sobjectsreceiver "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8sobjectsreceiver"
 	syslogreceiver "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/syslogreceiver"
 )
@@ -74,11 +82,28 @@ func components() (otelcol.Factories, error) {
 	factories.ExporterModules[otlphttpexporter.NewFactory().Type()] = "go.opentelemetry.io/collector/exporter/otlphttpexporter v0.116.0"
 	factories.ExporterModules[fileexporter.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/fileexporter v0.116.0"
 
-	factories.Processors, err = processor.MakeFactoryMap()
+	factories.Processors, err = processor.MakeFactoryMap(
+		batchprocessor.NewFactory(),
+		k8seventsenricherprocessor.NewFactory(),
+		redactionbykeyprocessor.NewFactory(),
+		attributesprocessor.NewFactory(),
+		filterprocessor.NewFactory(),
+		k8sattributesprocessor.NewFactory(),
+		resourceprocessor.NewFactory(),
+		transformprocessor.NewFactory(),
+	)
 	if err != nil {
 		return otelcol.Factories{}, err
 	}
 	factories.ProcessorModules = make(map[component.Type]string, len(factories.Processors))
+	factories.ProcessorModules[batchprocessor.NewFactory().Type()] = "go.opentelemetry.io/collector/processor/batchprocessor v0.116.0"
+	factories.ProcessorModules[k8seventsenricherprocessor.NewFactory().Type()] = "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor v0.116.0"
+	factories.ProcessorModules[redactionbykeyprocessor.NewFactory().Type()] = "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor v0.116.0"
+	factories.ProcessorModules[attributesprocessor.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/processor/attributesprocessor v0.116.0"
+	factories.ProcessorModules[filterprocessor.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/processor/filterprocessor v0.116.0"
+	factories.ProcessorModules[k8sattributesprocessor.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sattributesprocessor v0.116.0"
+	factories.ProcessorModules[resourceprocessor.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/processor/resourceprocessor v0.116.0"
+	factories.ProcessorModules[transformprocessor.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/processor/transformprocessor v0.116.0"
 
 	factories.Connectors, err = connector.MakeFactoryMap()
 	if err != nil {

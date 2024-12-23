@@ -2,7 +2,6 @@ dist:
   module: github.com/lumigo-io/lumigo-otel-collector-contrib
   name: lumigo-collector
   description: Lumigo OpenTelemetry collector
-  otelcol_version: "0.116.0"
   version: "0.116.0-dev"
   output_path: cmd/otelcontribcol
 
@@ -10,7 +9,7 @@ exporters:
   - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/awskinesisexporter v0.116.0"
   - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/awss3exporter v0.116.0"
   - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/kafkaexporter v0.116.0"
-  - gomod: "go.opentelemetry.io/collector/exporter/loggingexporter v0.116.0"
+  - gomod: "go.opentelemetry.io/collector/exporter/debugexporter v0.116.0"
   - gomod: "go.opentelemetry.io/collector/exporter/otlphttpexporter v0.116.0"
   - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/fileexporter v0.116.0"
 
