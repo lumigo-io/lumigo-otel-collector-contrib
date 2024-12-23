@@ -21,6 +21,7 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sattributesprocessor v0.116.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/processor/resourceprocessor v0.116.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/processor/transformprocessor v0.116.0
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/awsfirehosereceiver v0.116.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8sobjectsreceiver v0.116.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/syslogreceiver v0.116.0
 	github.com/stretchr/testify v1.10.0
