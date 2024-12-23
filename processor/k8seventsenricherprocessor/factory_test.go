@@ -50,7 +50,7 @@ func TestCreateProcessor(t *testing.T) {
 
 	// Fails with bad K8s Config.
 	r, err := createLogsProcessor(
-		context.Background(), processortest.NewNopCreateSettings(),
+		context.Background(), processortest.NewNopSettings(),
 		rCfg, consumertest.NewNop(),
 	)
 	assert.Error(t, err)
@@ -61,7 +61,7 @@ func TestCreateProcessor(t *testing.T) {
 
 	r, err = createLogsProcessor(
 		context.Background(),
-		processortest.NewNopCreateSettings(),
+		processortest.NewNopSettings(),
 		rCfg, consumertest.NewNop(),
 	)
 	assert.NoError(t, err)

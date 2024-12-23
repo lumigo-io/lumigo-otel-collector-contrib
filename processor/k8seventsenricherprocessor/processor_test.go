@@ -33,7 +33,7 @@ func TestNewProcessor(t *testing.T) {
 	rCfg := createDefaultConfig().(*Config)
 	rCfg.makeDynamicClient = newMockDynamicClient().getMockDynamicClient
 	r, err := createKubernetesProcessor(
-		processortest.NewNopCreateSettings(),
+		processortest.NewNopSettings(),
 		rCfg,
 	)
 
@@ -64,7 +64,7 @@ func TestEnrichDeploymentPodEvent(t *testing.T) {
 	require.NoError(t, err)
 
 	r, err := createKubernetesProcessor(
-		processortest.NewNopCreateSettings(),
+		processortest.NewNopSettings(),
 		rCfg,
 	)
 	require.NoError(t, err)

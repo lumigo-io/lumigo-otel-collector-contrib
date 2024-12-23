@@ -56,4 +56,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace go.opentelemetry.io/collector/confmap => go.opentelemetry.io/collector/confmap v1.18.0
+replace go.opentelemetry.io/collector/confmap => go.opentelemetry.io/collector/confmap v0.107.0

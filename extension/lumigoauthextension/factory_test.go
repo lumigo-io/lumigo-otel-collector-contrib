@@ -39,7 +39,7 @@ func TestClientAuth(t *testing.T) {
 		Token: "",
 		Type:  Client,
 	}
-	extension, err := createExtension(context.Background(), extensiontest.NewNopCreateSettings(), cfg)
+	extension, err := createExtension(context.Background(), extensiontest.NewNopSettings(), cfg)
 	assert.IsType(t, auth.NewClient(), extension)
 	assert.NoError(t, err)
 }
@@ -49,7 +49,7 @@ func TestServerAuth(t *testing.T) {
 		Token: "",
 		Type:  Server,
 	}
-	extension, err := createExtension(context.Background(), extensiontest.NewNopCreateSettings(), cfg)
+	extension, err := createExtension(context.Background(), extensiontest.NewNopSettings(), cfg)
 	assert.IsType(t, auth.NewServer(), extension)
 	assert.NoError(t, err)
 }
