@@ -53,7 +53,7 @@ func createDefaultConfig() component.Config {
 
 func createLogsProcessor(
 	ctx context.Context,
-	params processor.CreateSettings,
+	params processor.Settings,
 	cfg component.Config,
 	nextLogsConsumer consumer.Logs,
 ) (processor.Logs, error) {
@@ -62,7 +62,7 @@ func createLogsProcessor(
 
 func createLogsProcessorWithOptions(
 	ctx context.Context,
-	set processor.CreateSettings,
+	set processor.Settings,
 	cfg component.Config,
 	nextLogsConsumer consumer.Logs,
 ) (processor.Logs, error) {
@@ -71,7 +71,7 @@ func createLogsProcessorWithOptions(
 		return nil, err
 	}
 
-	return processorhelper.NewLogsProcessor(
+	return processorhelper.NewLogs(
 		ctx,
 		set,
 		cfg,
@@ -83,7 +83,7 @@ func createLogsProcessorWithOptions(
 }
 
 func createKubernetesProcessor(
-	params processor.CreateSettings,
+	params processor.Settings,
 	cfg component.Config,
 ) (*kubernetesprocessor, error) {
 	client, err := cfg.(*Config).getDynamicClient()

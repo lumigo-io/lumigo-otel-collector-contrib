@@ -2,37 +2,43 @@ dist:
   module: github.com/lumigo-io/lumigo-otel-collector-contrib
   name: lumigo-collector
   description: Lumigo OpenTelemetry collector
-  otelcol_version: "0.102.0"
-  version: "0.102.0-dev"
+  version: "0.116.0-dev"
   output_path: cmd/otelcontribcol
 
 exporters:
-  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/awskinesisexporter v0.102.0"
-  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/awss3exporter v0.102.0"
-  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/kafkaexporter v0.102.0"
-  - gomod: "go.opentelemetry.io/collector/exporter/loggingexporter v0.102.0"
-  - gomod: "go.opentelemetry.io/collector/exporter/otlphttpexporter v0.102.0"
-  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/fileexporter v0.102.0"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/awskinesisexporter v0.116.0"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/awss3exporter v0.116.0"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/kafkaexporter v0.116.0"
+  - gomod: "go.opentelemetry.io/collector/exporter/debugexporter v0.116.0"
+  - gomod: "go.opentelemetry.io/collector/exporter/otlphttpexporter v0.116.0"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/fileexporter v0.116.0"
 
 extensions:
-  - gomod: "github.com/lumigo-io/lumigo-otel-collector-contrib/extension/lumigoauthextension v0.102.0"
-  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/extension/headerssetterextension v0.102.0"
-  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/extension/healthcheckextension v0.102.0"
+  - gomod: "github.com/lumigo-io/lumigo-otel-collector-contrib/extension/lumigoauthextension v0.116.0"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/extension/headerssetterextension v0.116.0"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/extension/healthcheckextension v0.116.0"
 
 receivers:
-  - gomod: "go.opentelemetry.io/collector/receiver/otlpreceiver v0.102.0"
-  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8sobjectsreceiver v0.102.0"
-  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/syslogreceiver v0.102.0"
+  - gomod: "go.opentelemetry.io/collector/receiver/otlpreceiver v0.116.0"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8sobjectsreceiver v0.116.0"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/syslogreceiver v0.116.0"
+
+providers:
+  - gomod: go.opentelemetry.io/collector/confmap/provider/envprovider v1.18.0
+  - gomod: go.opentelemetry.io/collector/confmap/provider/fileprovider v1.18.0
+  - gomod: go.opentelemetry.io/collector/confmap/provider/httpprovider v1.18.0
+  - gomod: go.opentelemetry.io/collector/confmap/provider/httpsprovider v1.18.0
+  - gomod: go.opentelemetry.io/collector/confmap/provider/yamlprovider v1.18.0
 
 processors:
-  - gomod: "go.opentelemetry.io/collector/processor/batchprocessor v0.102.0"
-  - gomod: "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor v0.102.0"
-  - gomod: "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor v0.102.0"
-  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/processor/attributesprocessor v0.102.0"
-  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/processor/filterprocessor v0.102.0"
-  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sattributesprocessor v0.102.0"
-  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/processor/resourceprocessor v0.102.0"
-  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/processor/transformprocessor v0.102.0"
+  - gomod: "go.opentelemetry.io/collector/processor/batchprocessor v0.116.0"
+  - gomod: "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor v0.116.0"
+  - gomod: "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor v0.116.0"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/processor/attributesprocessor v0.116.0"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/processor/filterprocessor v0.116.0"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sattributesprocessor v0.116.0"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/processor/resourceprocessor v0.116.0"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/processor/transformprocessor v0.116.0"
 
 replaces:
   - github.com/lumigo-io/lumigo-otel-collector-contrib/internal/k8sconfig => ../../internal/k8sconfig
