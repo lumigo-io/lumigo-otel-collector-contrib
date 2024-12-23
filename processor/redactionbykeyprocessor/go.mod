@@ -1,6 +1,6 @@
 module github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor
 
-go 1.22.3
+go 1.22.4
 
 require (
 	github.com/stretchr/testify v1.10.0
