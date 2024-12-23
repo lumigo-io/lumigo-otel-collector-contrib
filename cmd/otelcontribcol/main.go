@@ -6,22 +6,30 @@ package main
 import (
 	"log"
 
+	k8seventsenricherprocessor "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor"
+	redactionbykeyprocessor "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor"
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/confmap"
-	"go.opentelemetry.io/collector/confmap/converter/expandconverter"
 	envprovider "go.opentelemetry.io/collector/confmap/provider/envprovider"
 	fileprovider "go.opentelemetry.io/collector/confmap/provider/fileprovider"
 	httpprovider "go.opentelemetry.io/collector/confmap/provider/httpprovider"
 	httpsprovider "go.opentelemetry.io/collector/confmap/provider/httpsprovider"
 	yamlprovider "go.opentelemetry.io/collector/confmap/provider/yamlprovider"
 	"go.opentelemetry.io/collector/otelcol"
+	batchprocessor "go.opentelemetry.io/collector/processor/batchprocessor"
+
+	attributesprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/attributesprocessor"
+	filterprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/filterprocessor"
+	k8sattributesprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sattributesprocessor"
+	resourceprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/resourceprocessor"
+	transformprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/transformprocessor"
 )
 
 func main() {
 	info := component.BuildInfo{
 		Command:     "lumigo-collector",
 		Description: "Lumigo OpenTelemetry collector",
-		Version:     "0.102.0-dev",
+		Version:     "0.116.0-dev",
 	}
 
 	set := otelcol.CollectorSettings{
@@ -35,9 +43,14 @@ func main() {
 					httpprovider.NewFactory(),
 					httpsprovider.NewFactory(),
 					yamlprovider.NewFactory(),
-				},
-				ConverterFactories: []confmap.ConverterFactory{
-					expandconverter.NewFactory(),
+					batchprocessor.NewFactory(),
+					k8seventsenricherprocessor.NewFactory(),
+					redactionbykeyprocessor.NewFactory(),
+					attributesprocessor.NewFactory(),
+					filterprocessor.NewFactory(),
+					k8sattributesprocessor.NewFactory(),
+					resourceprocessor.NewFactory(),
+					transformprocessor.NewFactory(),
 				},
 			},
 		},
