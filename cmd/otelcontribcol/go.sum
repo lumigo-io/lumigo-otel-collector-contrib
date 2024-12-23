@@ -442,6 +442,8 @@ github.com/open-telemetry/opentelemetry-collector-contrib/processor/resourceproc
 github.com/open-telemetry/opentelemetry-collector-contrib/processor/resourceprocessor v0.116.0/go.mod h1:H1T/KD5SwsI/dQlavg0Bo+6gXuRYyxo0qdmCdLVbT0w=
 github.com/open-telemetry/opentelemetry-collector-contrib/processor/transformprocessor v0.116.0 h1:a48/8x5VSZSSBkdifVC0mSgNtdJ0M0GcRtX98VVd4nk=
 github.com/open-telemetry/opentelemetry-collector-contrib/processor/transformprocessor v0.116.0/go.mod h1:5MKetAGO0XkoZSqdoZhfxSoFq3hn7zmEYF4Yjf+i+CI=
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/awsfirehosereceiver v0.116.0 h1:+vkz5HR2mZCsV7NUERN5zI8MgKjrnUsBA+PiXjjYzXo=
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/awsfirehosereceiver v0.116.0/go.mod h1:bzw+91poGdR8AzmjdYZHuLfAnbHlEHTLE++/MEQsCLA=
 github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8sobjectsreceiver v0.116.0 h1:0cNM0v16smHkBmIzlO+LLxaoQpp6sgvI4TcQqlzlii4=
 github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8sobjectsreceiver v0.116.0/go.mod h1:g6iyJIrXp7WX/m22VIMWluBi3jiL4REypKW65yqoIcI=
 github.com/open-telemetry/opentelemetry-collector-contrib/receiver/syslogreceiver v0.116.0 h1:jsVEKZnKygcgtamDRcwmDWmk+PgGK+qXDeB3iDTrmJE=
