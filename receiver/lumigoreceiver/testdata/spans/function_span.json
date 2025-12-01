@@ -1,0 +1,44 @@
+{
+  "isMalformedTransactionId": false,
+  "event": "{\"Records\": []}",
+  "readiness": "cold",
+  "manualTraces": [],
+  "region": "us-west-2",
+  "memoryAllocated": "2000",
+  "runtime": "AWS_Lambda_python3.11",
+  "parentId": "e4974d95-4c31-47b1-aa24-1cae84dafa9b",
+  "name": "prod_lumigo-search-engine_push-to-clickhouse",
+  "lambda_container_id": "72bdf227-11ce-4c88-a369-975c3ca1b551",
+  "transactionId": "2e14f9b22f07f915f6d6a499",
+  "type": "function",
+  "id": "e4974d95-4c31-47b1-aa24-1cae84dafa9b",
+  "info": {
+    "logStreamName": "2025/11/23/[$LATEST]f764c365a4274bf299d4499827ffe754",
+    "trigger": [
+      {
+        "id": "8dd4dc5e-bfd3-49b5-9c76-46f6d6c2f545",
+        "targetId": null,
+        "triggeredBy": "kinesis",
+        "extra": {
+          "arn": "arn:aws:kinesis:us-west-2:114300393969:stream/prod_common-resources_executions-kinesis-stream",
+          "recordsNum": 4,
+          "shardId": "shardId-000000001866"
+        }
+      }
+    ],
+    "tracer": {
+      "version": "1.1.257"
+    },
+    "logGroupName": "/aws/lambda/prod_lumigo-search-engine_push-to-clickhouse",
+    "traceId": {
+      "Root": "1-6922e8ad-2e14f9b22f07f915f6d6a499"
+    }
+  },
+  "started": 1763895471480,
+  "envs": "{\"AWS_LAMBDA_FUNCTION_VERSION\": \"$LATEST\"}",
+  "token": "t_1b8e3e1eada1064d41ff",
+  "account": "114300393969",
+  "reporter_rtt": 2,
+  "ended": 1763895473429,
+  "return_value": "53"
+}

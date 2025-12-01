@@ -1,0 +1,37 @@
+{
+  "region": "us-west-2",
+  "parentId": "e4974d95-4c31-47b1-aa24-1cae84dafa9b",
+  "lambda_container_id": "72bdf227-11ce-4c88-a369-975c3ca1b551",
+  "transactionId": "2e14f9b22f07f915f6d6a499",
+  "type": "http",
+  "ended": 1763895471812,
+  "info": {
+    "httpInfo": {
+      "request": {
+        "headers": "{\"host\": \"lmg-prod-common-resources-config-cache.s3.us-west-2.amazonaws.com\", \"accept-encoding\": \"identity\"}",
+        "body": "",
+        "method": "GET",
+        "uri": "lmg-prod-common-resources-config-cache.s3.us-west-2.amazonaws.com/customers/all_customers",
+        "instance_id": 281473249358224
+      },
+      "host": "lmg-prod-common-resources-config-cache.s3.us-west-2.amazonaws.com",
+      "response": {
+        "body": "compressed data...",
+        "statusCode": 200,
+        "headers": "{\"x-amz-id-2\": \"OyyzMFqfftRm6Nr94ejMDnT23O3urBu0gwhtBkt64UDeFfhj6waHrxNTN0eSiwQwFI/6+B5Nl44=\", \"x-amz-request-id\": \"G4K740EBCCK2DTMG\"}"
+      }
+    },
+    "tracer": {
+      "version": "1.1.257"
+    },
+    "resourceName": "lmg-prod-common-resources-config-cache",
+    "messageId": "G4K740EBCCK2DTMG",
+    "traceId": {
+      "Root": "1-6922e8ad-2e14f9b22f07f915f6d6a499"
+    }
+  },
+  "id": "e1b519c1-c819-44c1-8a7d-42f20f10c46b",
+  "started": 1763895471750,
+  "token": "t_1b8e3e1eada1064d41ff",
+  "account": "114300393969"
+}

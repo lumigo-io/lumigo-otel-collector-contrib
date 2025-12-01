@@ -23,6 +23,7 @@ receivers:
   - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8sobjectsreceiver v0.116.0"
   - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/syslogreceiver v0.116.0"
   - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/awsfirehosereceiver v0.116.0"
+  - gomod: "github.com/lumigo-io/lumigo-otel-collector-contrib/receiver/lumigoreceiver v0.116.0"
 
 providers:
   - gomod: go.opentelemetry.io/collector/confmap/provider/envprovider v1.18.0
@@ -46,4 +47,5 @@ replaces:
   - github.com/lumigo-io/lumigo-otel-collector-contrib/extension/lumigoauthextension => ../../extension/lumigoauthextension
   - github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor => ../../processor/k8seventsenricherprocessor
   - github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor => ../../processor/redactionbykeyprocessor
+  - github.com/lumigo-io/lumigo-otel-collector-contrib/receiver/lumigoreceiver => ../../receiver/lumigoreceiver
   - github.com/openshift/api v3.9.0+incompatible => github.com/openshift/api v0.0.0-20210521075222-e273a339932a
