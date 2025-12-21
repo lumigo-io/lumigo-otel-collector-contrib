@@ -2,8 +2,6 @@ name: dev-release
 on:
   workflow_dispatch:
   push:
-    branches:
-      - '**'
     branches-ignore:
       - 'main'
 
@@ -26,12 +24,9 @@ jobs:
         run: |
           COMMIT_MSG=$(git log -1 --pretty=%B)
           if echo "$COMMIT_MSG" | grep -q "\[create-dev-release\]"; then
-            echo "should_run=true" >> $GITHUB_OUTPUT
-            echo "✓ Commit message contains [create-dev-release]"
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
           else
-            echo "should_run=false" >> $GITHUB_OUTPUT
-            echo "✗ Commit message does not contain [create-dev-release]"
-            echo "Commit message: $COMMIT_MSG"
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
           fi
 
   build-dev-release:
@@ -114,10 +109,8 @@ jobs:
           
           # If git describe doesn't find a matching tag, fall back to versions.yaml
           if [[ ! "$BASE_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
-            echo "No version tag found, checking versions.yaml..."
             if [ -f "versions.yaml" ]; then
               BASE_VERSION=$(grep -A 1 "module-sets:" versions.yaml | grep "version:" | head -1 | sed 's/.*version: *//' | tr -d ' ')
-              echo "Using version from versions.yaml: $BASE_VERSION"
             else
               echo "ERROR: Could not determine base version"
               exit 1
@@ -126,17 +119,10 @@ jobs:
           
           SHORT_SHA=$(git rev-parse --short=8 HEAD)
           BRANCH_NAME="${{ github.ref_name }}"
-          # Sanitize branch name (remove special chars, limit length)
           BRANCH_NAME=$(echo "$BRANCH_NAME" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]' | cut -c1-20)
-          
-          # Create dev release tag: v0.116.0-dev-<branch>-<sha>
           RELEASE_TAG="${BASE_VERSION}-dev-${BRANCH_NAME}-${SHORT_SHA}"
           
-          echo "tag=${RELEASE_TAG}" >> $GITHUB_OUTPUT
-          echo "Release tag: ${RELEASE_TAG}"
-          echo "Base version: ${BASE_VERSION}"
-          echo "Branch: ${BRANCH_NAME}"
-          echo "Commit SHA: ${SHORT_SHA}"
+          echo "tag=${RELEASE_TAG}" >> "$GITHUB_OUTPUT"
       - name: Create GitHub Release
         run: |
           gh release create "${{ steps.release_tag.outputs.tag }}" \
