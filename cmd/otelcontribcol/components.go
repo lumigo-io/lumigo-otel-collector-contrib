@@ -6,6 +6,7 @@ import (
 	lumigoauthextension "github.com/lumigo-io/lumigo-otel-collector-contrib/extension/lumigoauthextension"
 	k8seventsenricherprocessor "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor"
 	redactionbykeyprocessor "github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor"
+	lumigoreceiver "github.com/lumigo-io/lumigo-otel-collector-contrib/receiver/lumigoreceiver"
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/connector"
 	"go.opentelemetry.io/collector/exporter"
@@ -56,6 +57,7 @@ func components() (otelcol.Factories, error) {
 		k8sobjectsreceiver.NewFactory(),
 		syslogreceiver.NewFactory(),
 		awsfirehosereceiver.NewFactory(),
+		lumigoreceiver.NewFactory(),
 	)
 	if err != nil {
 		return otelcol.Factories{}, err
@@ -65,6 +67,7 @@ func components() (otelcol.Factories, error) {
 	factories.ReceiverModules[k8sobjectsreceiver.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8sobjectsreceiver v0.116.0"
 	factories.ReceiverModules[syslogreceiver.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/syslogreceiver v0.116.0"
 	factories.ReceiverModules[awsfirehosereceiver.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/awsfirehosereceiver v0.116.0"
+	factories.ReceiverModules[lumigoreceiver.NewFactory().Type()] = "github.com/lumigo-io/lumigo-otel-collector-contrib/receiver/lumigoreceiver v0.116.0"
 
 	factories.Exporters, err = exporter.MakeFactoryMap(
 		awskinesisexporter.NewFactory(),

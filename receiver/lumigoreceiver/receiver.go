@@ -48,6 +48,8 @@ func (r *lumigoReceiver) Start(ctx context.Context, host component.Host) error {
 	if endpoint == "" {
 		endpoint = "0.0.0.0:8088"
 	}
+	// Ensure ServerConfig uses the effective endpoint.
+	r.config.Endpoint = endpoint
 
 	r.settings.Logger.Info("Starting Lumigo receiver", zap.String("endpoint", endpoint))
 
@@ -66,9 +68,17 @@ func (r *lumigoReceiver) Start(ctx context.Context, host component.Host) error {
 		return fmt.Errorf("failed to create server: %w", err)
 	}
 
+	ln, err := r.config.ServerConfig.ToListener(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to create listener: %w", err)
+	}
+
 	// Start the server in a goroutine
 	go func() {
-		if err := r.server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		// NOTE: confighttp.ServerConfig.ToServer() does not set http.Server.Addr.
+		// We must Serve() on a listener created from ServerConfig, otherwise ListenAndServe()
+		// will bind to ":http" (port 80) and ignore the configured endpoint.
+		if err := r.server.Serve(ln); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			r.settings.Logger.Error("Server error", zap.Error(err))
 		}
 	}()
