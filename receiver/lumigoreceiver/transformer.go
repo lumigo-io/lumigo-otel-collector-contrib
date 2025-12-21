@@ -566,6 +566,7 @@ func unmarshalSingleSpan(data []byte) (LumigoSpan, error) {
 		}
 		return &httpSpan, nil
 	default:
-		return nil, fmt.Errorf("unknown span type: %s", typeCheck.Type)
+		// Skip unknown span types (e.g., "enrichment") instead of failing the batch
+		return nil, ErrSkipSpan
 	}
 }
