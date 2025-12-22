@@ -190,11 +190,17 @@ func setResourceAttributes(attrs pcommon.Map, span LumigoSpan) {
 		}
 
 		if funcSpan.MemoryAllocated != "" {
-			attrs.PutStr("faas.memory_limit", funcSpan.MemoryAllocated)
+			attrs.PutStr(semconv.AttributeFaaSMaxMemory, funcSpan.MemoryAllocated)
 		}
 
 		if funcSpan.Runtime != "" {
 			attrs.PutStr("faas.runtime", funcSpan.Runtime)
+		}
+
+		// Build Lambda ARN for cloud.resource_id
+		if base.Account != "" && base.Region != "" && funcSpan.Name != "" {
+			arn := fmt.Sprintf("arn:aws:lambda:%s:%s:function:%s", base.Region, base.Account, funcSpan.Name)
+			attrs.PutStr(semconv.AttributeCloudResourceID, arn)
 		}
 
 		// Add Lambda-specific info from Info field
@@ -355,6 +361,11 @@ func setFunctionAttributes(attrs pcommon.Map, span *FunctionSpan) {
 
 	// Add trigger information from Info
 	if span.Info != nil {
+		if requestID, ok := span.Info["requestId"].(string); ok {
+			attrs.PutStr(semconv.AttributeFaaSInvocationID, requestID)
+		}
+
+
 		if trigger, ok := span.Info["trigger"].([]interface{}); ok && len(trigger) > 0 {
 			if triggerMap, ok := trigger[0].(map[string]interface{}); ok {
 				if triggeredBy, ok := triggerMap["triggeredBy"].(string); ok {
