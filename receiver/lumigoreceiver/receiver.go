@@ -117,7 +117,7 @@ func (r *lumigoReceiver) handleTraces(w http.ResponseWriter, req *http.Request) 
 		zap.String("content_type", req.Header.Get("Content-Type")))
 
 	// Unmarshal Lumigo spans
-	lumigoSpans, err := unmarshalLumigoSpans(body)
+	lumigoSpans, err := unmarshalLumigoSpans(body, r.settings.Logger)
 	if err != nil {
 		r.settings.Logger.Error("Failed to unmarshal Lumigo spans",
 			zap.Error(err),

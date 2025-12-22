@@ -13,6 +13,7 @@ import (
 	"go.opentelemetry.io/collector/pdata/pcommon"
 	"go.opentelemetry.io/collector/pdata/ptrace"
 	semconv "go.opentelemetry.io/collector/semconv/v1.27.0"
+	"go.uber.org/zap"
 )
 
 // ErrSkipSpan is returned when a span should be skipped during unmarshaling
@@ -483,7 +484,7 @@ func parseTraceID(id string) (pcommon.TraceID, error) {
 }
 
 // unmarshalLumigoSpans parses JSON into Lumigo spans
-func unmarshalLumigoSpans(data []byte) (LumigoSpanBatch, error) {
+func unmarshalLumigoSpans(data []byte, logger *zap.Logger) (LumigoSpanBatch, error) {
 	// First, check if it's an array or single object
 	var rawData interface{}
 	if err := json.Unmarshal(data, &rawData); err != nil {
@@ -500,7 +501,7 @@ func unmarshalLumigoSpans(data []byte) (LumigoSpanBatch, error) {
 			if err != nil {
 				return nil, fmt.Errorf("failed to marshal span at index %d: %w", i, err)
 			}
-			span, err := unmarshalSingleSpan(itemBytes)
+			span, err := unmarshalSingleSpan(itemBytes, logger)
 			if err != nil {
 				// Skip spans that should be filtered out
 				if errors.Is(err, ErrSkipSpan) {
@@ -512,7 +513,7 @@ func unmarshalLumigoSpans(data []byte) (LumigoSpanBatch, error) {
 		}
 	case map[string]interface{}:
 		// Single span
-		span, err := unmarshalSingleSpan(data)
+		span, err := unmarshalSingleSpan(data, logger)
 		if err != nil {
 			// Skip spans that should be filtered out
 			if errors.Is(err, ErrSkipSpan) {
@@ -529,7 +530,7 @@ func unmarshalLumigoSpans(data []byte) (LumigoSpanBatch, error) {
 }
 
 // unmarshalSingleSpan unmarshals a single span based on its type field
-func unmarshalSingleSpan(data []byte) (LumigoSpan, error) {
+func unmarshalSingleSpan(data []byte, logger *zap.Logger) (LumigoSpan, error) {
 	// First, peek at the ID to check if it should be skipped
 	var idCheck struct {
 		ID string `json:"id"`
@@ -566,7 +567,10 @@ func unmarshalSingleSpan(data []byte) (LumigoSpan, error) {
 		}
 		return &httpSpan, nil
 	default:
-		// Skip unknown span types (e.g., "enrichment") instead of failing the batch
+		// Log and skip unsupported span types instead of failing the entire batch
+		logger.Error("Skipping span with unsupported type",
+			zap.String("span_type", typeCheck.Type),
+			zap.String("span_id", idCheck.ID))
 		return nil, ErrSkipSpan
 	}
 }

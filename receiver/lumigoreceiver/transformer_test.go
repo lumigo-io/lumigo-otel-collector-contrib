@@ -12,6 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.opentelemetry.io/collector/pdata/ptrace"
 	semconv "go.opentelemetry.io/collector/semconv/v1.27.0"
+	"go.uber.org/zap"
 )
 
 func TestUnmarshalLumigoSpans(t *testing.T) {
@@ -51,11 +52,24 @@ func TestUnmarshalLumigoSpans(t *testing.T) {
 			want:    0,
 			wantErr: true,
 		},
+		{
+			name:    "unsupported span type skipped",
+			input:   `{"id":"test-id","transactionId":"test-tx","type":"unsupported","started":1000,"ended":2000}`,
+			want:    0,
+			wantErr: false,
+		},
+		{
+			name:    "array with unsupported span type skipped",
+			input:   `[{"id":"test-id-1","transactionId":"test-tx","type":"function","started":1000,"ended":2000},{"id":"test-id-2","transactionId":"test-tx","type":"unsupported","started":1500,"ended":2500},{"id":"test-id-3","transactionId":"test-tx","type":"http","started":2000,"ended":3000}]`,
+			want:    2,
+			wantErr: false,
+		},
 	}
 
+	logger := zap.NewNop()
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			spans, err := unmarshalLumigoSpans([]byte(tt.input))
+			spans, err := unmarshalLumigoSpans([]byte(tt.input), logger)
 			if tt.wantErr {
 				assert.Error(t, err)
 			} else {
@@ -229,7 +243,8 @@ func TestTransformLumigoToOTLP_WithRealSpans(t *testing.T) {
 			data, err := os.ReadFile(spanFile)
 			require.NoError(t, err)
 
-			spans, err := unmarshalLumigoSpans(data)
+			logger := zap.NewNop()
+			spans, err := unmarshalLumigoSpans(data, logger)
 			require.NoError(t, err)
 			require.NotEmpty(t, spans)
 
