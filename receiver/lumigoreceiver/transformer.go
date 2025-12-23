@@ -373,12 +373,11 @@ func setFunctionAttributes(attrs pcommon.Map, span *FunctionSpan) {
 		attrs.PutInt("lumigo.reporter_rtt", int64(span.ReporterRTT))
 	}
 
+	// Set faas.invocation_id from the span ID
+	attrs.PutStr(semconv.AttributeFaaSInvocationID, span.ID)
+
 	// Add trigger information from Info
 	if span.Info != nil {
-		if requestID, ok := span.Info["requestId"].(string); ok {
-			attrs.PutStr(semconv.AttributeFaaSInvocationID, requestID)
-		}
-
 		if trigger, ok := span.Info["trigger"].([]interface{}); ok && len(trigger) > 0 {
 			if triggerMap, ok := trigger[0].(map[string]interface{}); ok {
 				if triggeredBy, ok := triggerMap["triggeredBy"].(string); ok {
