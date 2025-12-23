@@ -114,8 +114,10 @@ func transformLumigoToOTLP(lumigoSpans LumigoSpanBatch) (ptrace.Traces, error) {
 		rs := traces.ResourceSpans().AppendEmpty()
 		resource := rs.Resource()
 
-		// Set resource attributes from the first span in the trace
-		setResourceAttributes(resource.Attributes(), spans[0])
+		// Find the function span for resource attributes (prioritize over HTTP spans)
+		// This ensures service.name and other Lambda-specific attrs are set correctly
+		resourceSpan := findResourceSpan(spans)
+		setResourceAttributes(resource.Attributes(), resourceSpan)
 
 		scopeSpans := rs.ScopeSpans().AppendEmpty()
 		scopeSpans.Scope().SetName("lumigo-tracer")
@@ -140,6 +142,18 @@ func transformLumigoToOTLP(lumigoSpans LumigoSpanBatch) (ptrace.Traces, error) {
 	}
 
 	return traces, nil
+}
+
+// findResourceSpan finds the best span to use for resource attributes
+// Prioritizes function spans over HTTP spans for proper service naming
+func findResourceSpan(spans []LumigoSpan) LumigoSpan {
+	for _, span := range spans {
+		if _, ok := span.(*FunctionSpan); ok {
+			return span
+		}
+	}
+	// Fallback to first span if no function span found
+	return spans[0]
 }
 
 // extractTraceID extracts the trace ID from a Lumigo span
@@ -365,7 +379,6 @@ func setFunctionAttributes(attrs pcommon.Map, span *FunctionSpan) {
 			attrs.PutStr(semconv.AttributeFaaSInvocationID, requestID)
 		}
 
-
 		if trigger, ok := span.Info["trigger"].([]interface{}); ok && len(trigger) > 0 {
 			if triggerMap, ok := trigger[0].(map[string]interface{}); ok {
 				if triggeredBy, ok := triggerMap["triggeredBy"].(string); ok {
@@ -392,6 +405,8 @@ func setHTTPAttributes(attrs pcommon.Map, span *HTTPSpan) {
 	if span.Info == nil {
 		return
 	}
+
+	base := span.GetBaseSpan()
 
 	httpInfo, ok := span.Info["httpInfo"].(map[string]interface{})
 	if !ok {
@@ -428,6 +443,11 @@ func setHTTPAttributes(attrs pcommon.Map, span *HTTPSpan) {
 	// Host
 	if host, ok := httpInfo["host"].(string); ok {
 		attrs.PutStr(semconv.AttributeServerAddress, host)
+	}
+
+	// NEW: aws.region on span level (for backend compatibility)
+	if base.Region != "" {
+		attrs.PutStr("aws.region", base.Region)
 	}
 
 	// Resource name and message ID
