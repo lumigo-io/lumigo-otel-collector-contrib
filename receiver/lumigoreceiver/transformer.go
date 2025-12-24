@@ -340,8 +340,6 @@ func setSpanAttributes(attrs pcommon.Map, span LumigoSpan) {
 	base := span.GetBaseSpan()
 
 	// Lumigo metadata
-	attrs.PutStr("lumigo.type", base.Type)
-
 	if base.TransactionID != "" {
 		attrs.PutStr("lumigo.transaction_id", base.TransactionID)
 	}

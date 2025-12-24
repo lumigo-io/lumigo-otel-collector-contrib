@@ -131,7 +131,6 @@ Lambda function spans (`type: "function"`) are transformed with:
 - `aws.log.stream.name`: CloudWatch log stream
 
 **Span Attributes:**
-- `lumigo.type`: `function`
 - `faas.coldstart`: Cold start status (`cold` or `warm`)
 - `faas.return_value`: Function return value
 - `faas.trigger`: Trigger type (e.g., `kinesis`, `sqs`, `http`)
@@ -144,7 +143,6 @@ Lambda function spans (`type: "function"`) are transformed with:
 HTTP client spans (`type: "http"`) are transformed with:
 
 **Span Attributes:**
-- `lumigo.type`: `http`
 - `http.request.method`: HTTP method
 - `http.response.status_code`: HTTP status code
 - `server.address`: Target host

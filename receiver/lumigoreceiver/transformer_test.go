@@ -148,10 +148,6 @@ func TestTransformLumigoToOTLP_FunctionSpan(t *testing.T) {
 
 	// Check span attributes
 	spanAttrs := span.Attributes()
-	val, ok = spanAttrs.Get("lumigo.type")
-	assert.True(t, ok)
-	assert.Equal(t, "function", val.Str())
-
 	val, ok = spanAttrs.Get("faas.coldstart")
 	assert.True(t, ok)
 	assert.Equal(t, "cold", val.Str())
