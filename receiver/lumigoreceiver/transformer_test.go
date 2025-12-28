@@ -160,6 +160,91 @@ func TestTransformLumigoToOTLP_FunctionSpan(t *testing.T) {
 	val, ok = spanAttrs.Get("faas.event")
 	assert.True(t, ok)
 	assert.Equal(t, `{"key":"value"}`, val.Str())
+
+	// Verify span status is OK (no error)
+	assert.Equal(t, ptrace.StatusCodeOk, span.Status().Code())
+	assert.Equal(t, "", span.Status().Message())
+	assert.Equal(t, 0, span.Events().Len())
+}
+
+func TestTransformLumigoToOTLP_FunctionSpanWithError(t *testing.T) {
+	lumigoSpan := &FunctionSpan{
+		BaseSpan: BaseSpan{
+			ID:            "aa4bb0cf-c686-4b0c-9571-3462b195e3f7",
+			ParentID:      "",
+			TransactionID: "2ab51b9462dd7bf217a6b71c",
+			Type:          "function",
+			Started:       1766923829902,
+			Ended:         1766923830006,
+			Account:       "593621721102",
+			Region:        "us-west-2",
+			Token:         "t_276e76232b3d49948d76c",
+		},
+		Name:            "wildrydes-dev-purchaseNewUnicron",
+		Runtime:         "AWS_Lambda_nodejs18.x",
+		MemoryAllocated: "1024",
+		Readiness:       "warm",
+		ReturnValue:     "null",
+		Error: &SpanError{
+			Type:       "Error",
+			Message:    "/var/task/node_modules/snappy/build/Release/binding.node: invalid ELF header",
+			Stacktrace: "Error: /var/task/node_modules/snappy/build/Release/binding.node: invalid ELF header\n    at Module._extensions..node (node:internal/modules/cjs/loader:1460:18)\n    at Module.load (node:internal/modules/cjs/loader:1203:32)",
+		},
+		Info: map[string]interface{}{
+			"traceId": map[string]interface{}{
+				"Root": "1-69511e35-2ab51b9462dd7bf217a6b71c",
+			},
+		},
+	}
+
+	traces, err := transformLumigoToOTLP(LumigoSpanBatch{lumigoSpan})
+	require.NoError(t, err)
+
+	assert.Equal(t, 1, traces.ResourceSpans().Len())
+	rs := traces.ResourceSpans().At(0)
+
+	// Check span
+	assert.Equal(t, 1, rs.ScopeSpans().Len())
+	assert.Equal(t, 1, rs.ScopeSpans().At(0).Spans().Len())
+	span := rs.ScopeSpans().At(0).Spans().At(0)
+
+	// Verify span status is ERROR
+	assert.Equal(t, ptrace.StatusCodeError, span.Status().Code())
+	assert.Equal(t, "/var/task/node_modules/snappy/build/Release/binding.node: invalid ELF header", span.Status().Message())
+
+	// Verify error attributes
+	spanAttrs := span.Attributes()
+	val, ok := spanAttrs.Get("error.type")
+	assert.True(t, ok)
+	assert.Equal(t, "Error", val.Str())
+
+	val, ok = spanAttrs.Get("error.message")
+	assert.True(t, ok)
+	assert.Equal(t, "/var/task/node_modules/snappy/build/Release/binding.node: invalid ELF header", val.Str())
+
+	val, ok = spanAttrs.Get("error.stack")
+	assert.True(t, ok)
+	assert.Contains(t, val.Str(), "Module._extensions..node")
+
+	// Verify exception event
+	assert.Equal(t, 1, span.Events().Len())
+	event := span.Events().At(0)
+	assert.Equal(t, "exception", event.Name())
+	assert.Equal(t, span.EndTimestamp(), event.Timestamp())
+
+	// Verify exception event attributes
+	eventAttrs := event.Attributes()
+	val, ok = eventAttrs.Get("exception.type")
+	assert.True(t, ok)
+	assert.Equal(t, "Error", val.Str())
+
+	val, ok = eventAttrs.Get("exception.message")
+	assert.True(t, ok)
+	assert.Equal(t, "/var/task/node_modules/snappy/build/Release/binding.node: invalid ELF header", val.Str())
+
+	val, ok = eventAttrs.Get("exception.stacktrace")
+	assert.True(t, ok)
+	assert.Contains(t, val.Str(), "Module._extensions..node")
 }
 
 func TestTransformLumigoToOTLP_HTTPSpan(t *testing.T) {

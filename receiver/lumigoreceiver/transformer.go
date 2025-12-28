@@ -34,6 +34,13 @@ type BaseSpan struct {
 	IsMalformedTransactionID bool   `json:"isMalformedTransactionId,omitempty"`
 }
 
+// SpanError represents error information in a span
+type SpanError struct {
+	Type       string `json:"type"`
+	Message    string `json:"message"`
+	Stacktrace string `json:"stacktrace"`
+}
+
 // FunctionSpan represents a Lambda function span
 type FunctionSpan struct {
 	BaseSpan
@@ -45,6 +52,7 @@ type FunctionSpan struct {
 	Event           string                 `json:"event,omitempty"`
 	Envs            string                 `json:"envs,omitempty"`
 	ReporterRTT     int                    `json:"reporter_rtt,omitempty"`
+	Error           *SpanError             `json:"error,omitempty"`
 	Info            map[string]interface{} `json:"info,omitempty"`
 }
 
@@ -285,8 +293,8 @@ func convertSpan(lumigoSpan LumigoSpan, otlpSpan ptrace.Span) error {
 	// Set attributes
 	setSpanAttributes(otlpSpan.Attributes(), lumigoSpan)
 
-	// Set status
-	otlpSpan.Status().SetCode(ptrace.StatusCodeOk)
+	// Set status and add exception events if there's an error
+	setSpanStatus(otlpSpan, lumigoSpan)
 
 	return nil
 }
@@ -354,6 +362,38 @@ func setSpanAttributes(attrs pcommon.Map, span LumigoSpan) {
 		setFunctionAttributes(attrs, s)
 	case *HTTPSpan:
 		setHTTPAttributes(attrs, s)
+	}
+}
+
+// setSpanStatus sets the span status and adds exception events if there's an error
+func setSpanStatus(otlpSpan ptrace.Span, span LumigoSpan) {
+	// Check if this is a function span with an error
+	if funcSpan, ok := span.(*FunctionSpan); ok && funcSpan.Error != nil {
+		// Set error status
+		otlpSpan.Status().SetCode(ptrace.StatusCodeError)
+		otlpSpan.Status().SetMessage(funcSpan.Error.Message)
+
+		// Add error attributes
+		attrs := otlpSpan.Attributes()
+		attrs.PutStr("error.type", funcSpan.Error.Type)
+		attrs.PutStr("error.message", funcSpan.Error.Message)
+		if funcSpan.Error.Stacktrace != "" {
+			attrs.PutStr("error.stack", funcSpan.Error.Stacktrace)
+		}
+
+		// Add exception event (OpenTelemetry semantic convention)
+		event := otlpSpan.Events().AppendEmpty()
+		event.SetName("exception")
+		event.SetTimestamp(otlpSpan.EndTimestamp()) // Use span end time for exception event
+		eventAttrs := event.Attributes()
+		eventAttrs.PutStr("exception.type", funcSpan.Error.Type)
+		eventAttrs.PutStr("exception.message", funcSpan.Error.Message)
+		if funcSpan.Error.Stacktrace != "" {
+			eventAttrs.PutStr("exception.stacktrace", funcSpan.Error.Stacktrace)
+		}
+	} else {
+		// No error, set OK status
+		otlpSpan.Status().SetCode(ptrace.StatusCodeOk)
 	}
 }
 
