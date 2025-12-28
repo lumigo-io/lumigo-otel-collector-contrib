@@ -98,6 +98,7 @@ func TestTransformLumigoToOTLP_FunctionSpan(t *testing.T) {
 		MemoryAllocated: "2000",
 		Readiness:       "cold",
 		ReturnValue:     "53",
+		Event:           `{"key":"value"}`,
 		Info: map[string]interface{}{
 			"traceId": map[string]interface{}{
 				"Root": "1-6922e8ad-2e14f9b22f07f915f6d6a499",
@@ -155,6 +156,10 @@ func TestTransformLumigoToOTLP_FunctionSpan(t *testing.T) {
 	val, ok = spanAttrs.Get("faas.return_value")
 	assert.True(t, ok)
 	assert.Equal(t, "53", val.Str())
+
+	val, ok = spanAttrs.Get("faas.event")
+	assert.True(t, ok)
+	assert.Equal(t, `{"key":"value"}`, val.Str())
 }
 
 func TestTransformLumigoToOTLP_HTTPSpan(t *testing.T) {

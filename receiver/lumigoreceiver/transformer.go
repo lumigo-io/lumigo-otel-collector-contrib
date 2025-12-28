@@ -367,6 +367,10 @@ func setFunctionAttributes(attrs pcommon.Map, span *FunctionSpan) {
 		attrs.PutStr("faas.return_value", span.ReturnValue)
 	}
 
+	if span.Event != "" {
+		attrs.PutStr("faas.event", span.Event)
+	}
+
 	if span.ReporterRTT > 0 {
 		attrs.PutInt("lumigo.reporter_rtt", int64(span.ReporterRTT))
 	}
