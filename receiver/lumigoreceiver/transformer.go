@@ -190,7 +190,6 @@ func extractTraceID(span LumigoSpan) string {
 // setResourceAttributes sets resource-level attributes
 func setResourceAttributes(attrs pcommon.Map, span LumigoSpan) {
 	base := span.GetBaseSpan()
-	info := span.GetInfo()
 
 	// Cloud provider
 	attrs.PutStr(semconv.AttributeCloudProvider, semconv.AttributeCloudProviderAWS)
@@ -223,16 +222,6 @@ func setResourceAttributes(attrs pcommon.Map, span LumigoSpan) {
 		if base.Account != "" && base.Region != "" && funcSpan.Name != "" {
 			arn := fmt.Sprintf("arn:aws:lambda:%s:%s:function:%s", base.Region, base.Account, funcSpan.Name)
 			attrs.PutStr(semconv.AttributeCloudResourceID, arn)
-		}
-
-		// Add Lambda-specific info from Info field
-		if info != nil {
-			if logGroupName, ok := info["logGroupName"].(string); ok {
-				attrs.PutStr("aws.log.group.name", logGroupName)
-			}
-			if logStreamName, ok := info["logStreamName"].(string); ok {
-				attrs.PutStr("aws.log.stream.name", logStreamName)
-			}
 		}
 
 		// Service name for function
@@ -437,6 +426,14 @@ func setFunctionAttributes(attrs pcommon.Map, span *FunctionSpan) {
 					}
 				}
 			}
+		}
+
+		// Add CloudWatch Logs metadata as span attributes
+		if logGroupName, ok := span.Info["logGroupName"].(string); ok {
+			attrs.PutStr("aws.log.group.name", logGroupName)
+		}
+		if logStreamName, ok := span.Info["logStreamName"].(string); ok {
+			attrs.PutStr("aws.log.stream.name", logStreamName)
 		}
 	}
 }
