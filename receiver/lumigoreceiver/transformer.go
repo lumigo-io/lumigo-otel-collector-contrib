@@ -465,6 +465,10 @@ func setHTTPAttributes(attrs pcommon.Map, span *HTTPSpan) {
 			// Store headers as JSON string
 			attrs.PutStr("http.request.headers", headers)
 		}
+
+		if body, ok := request["body"].(string); ok {
+			attrs.PutStr("http.request.body", body)
+		}
 	}
 
 	// Response attributes
@@ -475,6 +479,10 @@ func setHTTPAttributes(attrs pcommon.Map, span *HTTPSpan) {
 
 		if headers, ok := response["headers"].(string); ok {
 			attrs.PutStr("http.response.headers", headers)
+		}
+
+		if body, ok := response["body"].(string); ok {
+			attrs.PutStr("http.response.body", body)
 		}
 	}
 

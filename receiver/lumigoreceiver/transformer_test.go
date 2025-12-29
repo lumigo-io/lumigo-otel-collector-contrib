@@ -161,6 +161,21 @@ func TestTransformLumigoToOTLP_FunctionSpan(t *testing.T) {
 	assert.True(t, ok)
 	assert.Equal(t, `{"key":"value"}`, val.Str())
 
+	// Check CloudWatch Logs attributes on span level
+	val, ok = spanAttrs.Get("aws.log.group.name")
+	assert.True(t, ok)
+	assert.Equal(t, "/aws/lambda/test-function", val.Str())
+
+	val, ok = spanAttrs.Get("aws.log.stream.name")
+	assert.True(t, ok)
+	assert.Equal(t, "2025/11/23/[$LATEST]test", val.Str())
+
+	// Verify these are NOT on resource level anymore
+	_, ok = resourceAttrs.Get("aws.log.group.name")
+	assert.False(t, ok)
+	_, ok = resourceAttrs.Get("aws.log.stream.name")
+	assert.False(t, ok)
+
 	// Verify span status is OK (no error)
 	assert.Equal(t, ptrace.StatusCodeOk, span.Status().Code())
 	assert.Equal(t, "", span.Status().Message())
@@ -263,12 +278,16 @@ func TestTransformLumigoToOTLP_HTTPSpan(t *testing.T) {
 		Info: map[string]interface{}{
 			"httpInfo": map[string]interface{}{
 				"request": map[string]interface{}{
-					"method": "GET",
-					"uri":    "lmg-prod-common-resources-config-cache.s3.us-west-2.amazonaws.com/customers/all_customers",
+					"method":  "GET",
+					"uri":     "lmg-prod-common-resources-config-cache.s3.us-west-2.amazonaws.com/customers/all_customers",
+					"headers": `{"host": "example.com", "accept": "application/json"}`,
+					"body":    `{"query": "test"}`,
 				},
 				"host": "lmg-prod-common-resources-config-cache.s3.us-west-2.amazonaws.com",
 				"response": map[string]interface{}{
 					"statusCode": float64(200),
+					"headers":    `{"content-type": "application/json"}`,
+					"body":       `{"result": "success"}`,
 				},
 			},
 			"resourceName": "lmg-prod-common-resources-config-cache",
@@ -310,6 +329,24 @@ func TestTransformLumigoToOTLP_HTTPSpan(t *testing.T) {
 	val, ok = spanAttrs.Get("aws.resource.name")
 	assert.True(t, ok)
 	assert.Equal(t, "lmg-prod-common-resources-config-cache", val.Str())
+
+	// Check request headers and body
+	val, ok = spanAttrs.Get("http.request.headers")
+	assert.True(t, ok)
+	assert.Equal(t, `{"host": "example.com", "accept": "application/json"}`, val.Str())
+
+	val, ok = spanAttrs.Get("http.request.body")
+	assert.True(t, ok)
+	assert.Equal(t, `{"query": "test"}`, val.Str())
+
+	// Check response headers and body
+	val, ok = spanAttrs.Get("http.response.headers")
+	assert.True(t, ok)
+	assert.Equal(t, `{"content-type": "application/json"}`, val.Str())
+
+	val, ok = spanAttrs.Get("http.response.body")
+	assert.True(t, ok)
+	assert.Equal(t, `{"result": "success"}`, val.Str())
 }
 
 func TestTransformLumigoToOTLP_WithRealSpans(t *testing.T) {
@@ -338,6 +375,53 @@ func TestTransformLumigoToOTLP_WithRealSpans(t *testing.T) {
 			require.NoError(t, err)
 
 			assert.Greater(t, traces.ResourceSpans().Len(), 0)
+
+			// Validate specific attributes from http_span.json
+			if filepath.Base(spanFile) == "http_span.json" {
+				rs := traces.ResourceSpans().At(0)
+				require.Equal(t, 1, rs.ScopeSpans().Len())
+				require.Equal(t, 1, rs.ScopeSpans().At(0).Spans().Len())
+				span := rs.ScopeSpans().At(0).Spans().At(0)
+				spanAttrs := span.Attributes()
+
+				// Validate request headers are extracted
+				val, ok := spanAttrs.Get("http.request.headers")
+				assert.True(t, ok)
+				assert.Contains(t, val.Str(), "lmg-prod-common-resources-config-cache.s3.us-west-2.amazonaws.com")
+
+				// Validate request body (should be empty string in the test file)
+				val, ok = spanAttrs.Get("http.request.body")
+				assert.True(t, ok)
+				assert.Equal(t, "", val.Str())
+
+				// Validate response headers are extracted
+				val, ok = spanAttrs.Get("http.response.headers")
+				assert.True(t, ok)
+				assert.Contains(t, val.Str(), "x-amz-request-id")
+
+				// Validate response body
+				val, ok = spanAttrs.Get("http.response.body")
+				assert.True(t, ok)
+				assert.Equal(t, "compressed data...", val.Str())
+			}
+
+			// Validate specific attributes from function_span.json
+			if filepath.Base(spanFile) == "function_span.json" {
+				rs := traces.ResourceSpans().At(0)
+				require.Equal(t, 1, rs.ScopeSpans().Len())
+				require.Equal(t, 1, rs.ScopeSpans().At(0).Spans().Len())
+				span := rs.ScopeSpans().At(0).Spans().At(0)
+				spanAttrs := span.Attributes()
+
+				// Validate CloudWatch Logs attributes are on span level
+				val, ok := spanAttrs.Get("aws.log.group.name")
+				assert.True(t, ok)
+				assert.Equal(t, "/aws/lambda/prod_lumigo-search-engine_push-to-clickhouse", val.Str())
+
+				val, ok = spanAttrs.Get("aws.log.stream.name")
+				assert.True(t, ok)
+				assert.Equal(t, "2025/11/23/[$LATEST]f764c365a4274bf299d4499827ffe754", val.Str())
+			}
 		})
 	}
 }
