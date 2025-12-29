@@ -7,6 +7,7 @@ module-sets:
       - github.com/lumigo-io/lumigo-otel-collector-contrib/internal/k8sconfig
       - github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor
       - github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor
+      - github.com/lumigo-io/lumigo-otel-collector-contrib/receiver/lumigoreceiver
 
 excluded-modules:
   - github.com/lumigo-io/lumigo-otel-collector-contrib/cmd/otelcontribcol

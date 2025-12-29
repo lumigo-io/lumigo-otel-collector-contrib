@@ -4,12 +4,13 @@ module github.com/lumigo-io/lumigo-otel-collector-contrib
 
 go 1.22.4
 
-toolchain go1.22.8
+toolchain go1.23.3
 
 require (
 	github.com/lumigo-io/lumigo-otel-collector-contrib/extension/lumigoauthextension v0.116.0
 	github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor v0.116.0
 	github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor v0.116.0
+	github.com/lumigo-io/lumigo-otel-collector-contrib/receiver/lumigoreceiver v0.116.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/awskinesisexporter v0.116.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/awss3exporter v0.116.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/fileexporter v0.116.0
@@ -284,5 +285,7 @@ replace github.com/lumigo-io/lumigo-otel-collector-contrib/extension/lumigoauthe
 replace github.com/lumigo-io/lumigo-otel-collector-contrib/processor/k8seventsenricherprocessor => ../../processor/k8seventsenricherprocessor
 
 replace github.com/lumigo-io/lumigo-otel-collector-contrib/processor/redactionbykeyprocessor => ../../processor/redactionbykeyprocessor
+
+replace github.com/lumigo-io/lumigo-otel-collector-contrib/receiver/lumigoreceiver => ../../receiver/lumigoreceiver
 
 replace github.com/openshift/api v3.9.0+incompatible => github.com/openshift/api v0.0.0-20210521075222-e273a339932a

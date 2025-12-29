@@ -1,0 +1,6 @@
+receivers:
+  lumigo:
+    endpoint: 0.0.0.0:8088
+
+  lumigo/custom:
+    endpoint: localhost:9999
